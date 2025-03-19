@@ -16,3 +16,11 @@
         <img src="./components/Daniel_TW_0.svg" width="300" height="100" alt="Made with SVG">
     </a>
 </p>
+
+## 成員介紹
+
+- 黃柏菻
+  - DevOps、後端專長，執行過許多或資訊安全的專案
+  - 曾經使用 Python 做過通訊軟體服務機器人
+  - 有許多使用者功能設定未能實現
+  - 為了彌補此方面的缺陷，因此學習資料庫
