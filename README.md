@@ -1,6 +1,6 @@
 # Project-Library
 
-G02 校園圖書館借用系統
+G02 校園圖書館圖書借用系統
 
 <!--[組員](https://github.com/NFU-Database-Group/.github/tree/main/profile) -->
 <p>
