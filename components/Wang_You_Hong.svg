@@ -1,11 +1,12 @@
-<svg fill="none" viewBox="0 0 300 100" width="300" height="100" xmlns="http://www.w3.org/2000/svg">	
+<svg fill="none" viewBox="0 0 500 220" width="500" height="220" xmlns="http://www.w3.org/2000/svg">	
     <defs>
         <clipPath id="circle-mask">
             <circle cx="50" cy="50" r="40" />
         </clipPath>
     </defs>
+    <rect x="3" y="3" width="494" height="214" rx="15" ry="15" stroke="#ccc" fill="#f9f9f9" stroke-width="3px" />
     <image href="data:image/png;base64,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" width="80" height="80" x="10" y="10" clip-path="url(#circle-mask)" />
-    <foreignObject x="100" y="10" width="200" height="80">
+    <foreignObject x="100" y="10" width="400" height="400">
         <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif;">
             <style>
                 * {
@@ -25,9 +26,22 @@
                     color: blue;
                     text-decoration: none;
                 }
+                ul {
+                    padding-left: 20px;
+                }
+                li {
+                    padding-top: 10px;
+                    color: #6B7A8A;
+                }
             </style>
             <p class="name">王又鋐 (41136102)</p>
             <p><a class="link" href="https://github.com/Wang-You-Hong">@Wang-You-Hong</a></p>
+            <ul>
+                <li>曾使用C語言做了一個簡單迷宮遊戲，<br/>包含了註冊、登等主要功能</li>
+                <li>利用C#做了一個能顯示公開的API資料網站</li>
+                <li>主要的功能都偏簡略</li>
+                <li>網頁需要使用資料庫補足需求，因此需要學習資料庫</li>
+            </ul>
         </div>
     </foreignObject>
 </svg>

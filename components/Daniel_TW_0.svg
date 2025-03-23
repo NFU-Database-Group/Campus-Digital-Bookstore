@@ -1,11 +1,12 @@
-<svg fill="none" viewBox="0 0 300 100" width="300" height="100" xmlns="http://www.w3.org/2000/svg">	
+<svg fill="none" viewBox="0 0 500 120" width="500" height="120" xmlns="http://www.w3.org/2000/svg">	
     <defs>
         <clipPath id="circle-mask">
             <circle cx="50" cy="50" r="40" />
         </clipPath>
     </defs>
+    <rect x="3" y="3" width="494" height="114" rx="15" ry="15" stroke="#ccc" fill="#f9f9f9" stroke-width="3px" />
     <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkCAIAAADxLsZiAAAF2UlEQVR4nOzXMRmjQBRG0c1+2EAeHXLokIeBkbDdKkgYknuOgfmb3DyWMcYfgF/3d/YAgDuIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkLDc9tJ2XLe9BXyRc19veMVlBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkLDMHsCznPs6e8I7bcc1ewJP4bIDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7ICEZfYAnmU7rtkT4CNcdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQmvMcbsDTzFdlyzJ7zfua+zJ/AILjsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkh4jTFmb/hW23HNnkDRua+zJ3ylZfYAnuXHfkj+kPjPZyyQIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZAgdkCC2AEJYgckiB2QIHZAgtgBCWIHJIgdkCB2QILYAQliBySIHZDwGmPM3gDwcS47IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsgQeyABLEDEsQOSBA7IEHsgASxAxLEDkgQOyBB7IAEsQMSxA5IEDsg4V8AAAD//+2lH2wexPvWAAAAAElFTkSuQmCC" width="80" height="80" x="10" y="10" clip-path="url(#circle-mask)" />
-    <foreignObject x="100" y="10" width="200" height="80">
+    <foreignObject x="100" y="10" width="400" height="400">
         <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif;">
             <style>
                 * { 
@@ -25,9 +26,19 @@
                     color: blue;
                     text-decoration: none;
                 }
+                ul {
+                    padding-left: 20px;
+                }
+                li {
+                    padding-top: 10px;
+                    color: #6B7A8A;
+                }
             </style>
             <p class="name">洪家鈞 (41143226)</p>
             <p><a class="link" href="https://github.com/Daniel-TW-0">@Daniel-TW-0</a></p>
+            <!-- <ul>
+                <li>待填</li>
+            </ul> -->
         </div>
     </foreignObject>
 </svg>
