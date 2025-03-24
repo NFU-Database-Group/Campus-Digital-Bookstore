@@ -37,7 +37,7 @@
             <p class="name">王又鋐 (41136102)</p>
             <p><a class="link" href="https://github.com/Wang-You-Hong">@Wang-You-Hong</a></p>
             <ul>
-                <li>曾使用C語言做了一個簡單迷宮遊戲，<br/>包含了註冊、登等主要功能</li>
+                <li>曾使用C語言做了一個簡單迷宮遊戲，<br/>包含了註冊、登入等主要功能</li>
                 <li>利用C#做了一個能顯示公開的API資料網站</li>
                 <li>主要的功能都偏簡略</li>
                 <li>網頁需要使用資料庫補足需求，因此需要學習資料庫</li>
