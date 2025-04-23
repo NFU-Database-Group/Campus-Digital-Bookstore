@@ -2,10 +2,13 @@
 
 G02 校園圖書館圖書借用系統
 
-## Discuss
-[Issues](https://github.com/NFU-Database-Group/Project-Library/issues)
+## Works
+
+- [Issues](https://github.com/NFU-Database-Group/Project-Library/issues)
+- [Discussion](https://github.com/NFU-Database-Group/Project-Library/discussions)
 
 ## Members
+
 <!--[組員](https://github.com/NFU-Database-Group/.github/tree/main/profile) -->
 <p>
     <a href="https://github.com/LTurret">
