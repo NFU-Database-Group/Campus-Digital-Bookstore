@@ -1,0 +1,72 @@
+{
+    // Code Runner Configuration
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.customCommand": "",
+    "code-runner.enableAppInsights": false,
+    "code-runner.preserveFocus": false,
+    "code-runner.runInTerminal": true,
+
+    // Formatter Configuration
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    },
+    "prettier.endOfLine": "lf",
+    "prettier.htmlWhitespaceSensitivity": "css",
+    "prettier.semi": true,
+    "prettier.tabWidth": 4,
+    "prettier.printWidth": 160,
+
+    // LaTeX Configuration
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "xelatex",
+            "tools": ["xelatex", "xelatex"]
+        },
+        {
+            "name": "bibtex",
+            "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
+        },
+        {
+            "name": "pdflatex",
+            "tools": ["pdflatex"]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "args": ["-interaction=nonstopmode", "-shell-escape", "%DOC%.tex"],
+            "command": "/usr/bin/xelatex",
+            "name": "xelatex"
+        },
+        {
+            "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"],
+            "command": "/usr/bin/pdflatex",
+            "name": "pdflatex"
+        },
+        {
+            "args": ["%DOCFILE%"],
+            "command": "/usr/bin/bibtex",
+            "name": "bibtex"
+        }
+    ],
+    "latex-workshop.linting.chktex.exec.args": ["-wall", "-n3", "-n22", "-n30", "-e16", "-q"],
+    "latex-workshop.message.latexlog.exclude": [
+        "Rerun to get /PageLabels entry.",
+        "Label(s) may have changed. Rerun to get cross-references right.",
+        "Label(s) may have changed.",
+        "Rerun to get cross-references right.",
+        "File `main.out' has changed.",
+        "Rerun to get outlines right",
+        "or use package `bookmark'.",
+        "Image '.*' on page .* moved",
+        "Another warning pattern here",
+        "Font shape `.*' undefined",
+        "Some font shapes were not available, defaults substituted",
+        "Unknown CJK family `//CJKttdefault' is being ignored",
+        "I found no \\citation commands",
+        "I found no \\bibdata command",
+        "I found no \\bibstyle command",
+        "Package xeCJK:.*"
+    ]
+}    
+    
