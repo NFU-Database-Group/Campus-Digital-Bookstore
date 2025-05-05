@@ -59,11 +59,11 @@
 
 ### 使用案例圖
 
-![Image](https://github.com/user-attachments/assets/ae79fa8d-18e9-4d6f-ac0d-4ae22427350b)
+![Image](../../src/latex/image/使用案例.png)
 
 ## 實體關係圖及詳細說明
 
-![Image](https://github.com/user-attachments/assets/7ab5af19-315d-43d3-aa39-b47faf23bcd1)
+![Image](../../src/latex/image/ChenERDiagram.png)
 
 ### User
 
