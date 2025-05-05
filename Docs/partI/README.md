@@ -1,4 +1,5 @@
 # Part I
+[討論(Github Issue)](https://github.com/NFU-Database-Group/Project-Library/issues/1)
 ## Table of Content
 - [系統需求說明](#系統需求說明)
 - [系統分析討論](#系統分析討論)

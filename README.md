@@ -6,6 +6,9 @@ G02 校園圖書館圖書借用系統
 
 - [Issues](https://github.com/NFU-Database-Group/Project-Library/issues)
 - [Discussion](https://github.com/NFU-Database-Group/Project-Library/discussions)
+
+## Part I
+- [Markdown Page](./Docs/partI/README.md)
 - [Slide I](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
 
 ## Members
