@@ -16,7 +16,7 @@ G02 Campus Digital Books
 
 ### Part I
 
-> [!NOTE] Final Project Part I
+> [!NOTE]
 >
 > 1. 題目
 > 2. 應用情境與使用案例
@@ -26,7 +26,7 @@ G02 Campus Digital Books
 
 ### Part II
 
-> [!NOTE] Final Project Part II
+> [!NOTE]
 >
 > 1. 請修正上次作業之系統需求說明+ERDiagram與說明
 > 2. 將完整之資料庫Schema以SQL語法並舉例說明
