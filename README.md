@@ -1,18 +1,22 @@
-# Project-Library
+# 校園數位書城
 
-G02 校園圖書館圖書借用系統
+[繁體中文｜[English](./README_en-US.md)]
 
-## Works
+G02 校園數位書城
 
-- [Issues](https://github.com/NFU-Database-Group/Project-Library/issues)
-- [Discussion](https://github.com/NFU-Database-Group/Project-Library/discussions)
+## 成果
 
-## Part I
+- [Issue](https://github.com/NFU-Database-Group/Project-Library/issues)
+- [討論區](https://github.com/NFU-Database-Group/Project-Library/discussions)
 
-- [Markdown Page](./Docs/partI/README.md)
-- [Slide I](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
+## 作業
 
-## Members
+### Part I
+
+- [Markdown 頁面](./Docs/partI/README.md)
+- [簡報](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
+
+## 成員
 
 [成員介紹](./Docs/members/README.md)  
 
