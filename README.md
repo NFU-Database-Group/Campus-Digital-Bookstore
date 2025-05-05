@@ -11,10 +11,25 @@ G02 校園數位書城
 
 ## 作業
 
+- [Markdown 頁面](./docs/partI/README.md)
+- [簡報](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
+
 ### Part I
 
-- [Markdown 頁面](./Docs/partI/README.md)
-- [簡報](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
+> [!NOTE] Final Project Part I
+>
+> 1. 題目
+> 2. 應用情境與使用案例
+> 3. 系統需求說明
+> 4. 完整性限制
+> 5. ER Diagram及詳細說明
+
+### Part II
+
+> [!NOTE] Final Project Part II
+>
+> 1. 請修正上次作業之系統需求說明+ERDiagram與說明
+> 2. 將完整之資料庫Schema以SQL語法並舉例說明
 
 ## 成員
 
