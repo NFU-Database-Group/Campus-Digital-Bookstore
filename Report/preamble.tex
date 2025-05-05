@@ -1,0 +1,119 @@
+% Packages and configurations
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage[singlelinecheck=false]{caption}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{fancyhdr}
+\usepackage[Lenny]{fncychap}
+\usepackage{fontspec}
+\usepackage{float}
+\usepackage[a4paper, top=1.2cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage[pdf]{graphviz}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{newclude}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{tocloft}
+\usepackage{wrapfig}
+\usepackage{xeCJK}
+\usepackage{zhnumber}
+
+% Format Configuration
+\pgfplotsset{compat=1.18}
+\linespread{1.25}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{1em}
+\definecolor{LightGray}{HTML}{FAFAFA}
+\makeatletter
+\newcommand{\unchapter}[1]{
+  \begingroup
+  \let\@makechapterhead\@gobble
+  \chapter{#1}
+  \endgroup
+}
+
+% Fonts Configuration
+\setmainfont{Times New Roman}
+\setCJKmainfont{DFKai-SB}
+\setCJKsansfont{DFKai-SB}
+\setCJKmonofont{PingFang TC}
+\setmonofont{Times New Roman}
+\CJKsetecglue{\hspace{-0.0005em}}
+
+% Unit Localization
+\renewcommand{\contentsname}{目錄}
+\renewcommand{\listtablename}{表目錄}
+\renewcommand{\listfigurename}{圖目錄}
+\renewcommand{\tablename}{表}
+\renewcommand{\figurename}{圖}
+\renewcommand{\thechapter}{\hspace{-0.5em}\zhnum{chapter}、}
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\cfttabpresnum}{\hspace{-0.5em}表}
+\renewcommand{\cfttabaftersnum}{、\hspace{0.3em}}
+\renewcommand{\cftfigpresnum}{\hspace{-0.5em}圖}
+\renewcommand{\cftfigaftersnum}{、\hspace{0.3em}}
+
+\DeclareCaptionLabelSeparator{comma}{、}
+\captionsetup[table]{labelsep=comma}
+\captionsetup[figure]{labelsep=comma}
+
+\makeatletter
+\renewcommand\chapter{\thispagestyle{plain}
+\global\@topnum\z@
+\@afterindentfalse
+\secdef\@chapter\@schapter}
+\makeatother
+
+% Title Styling
+% Chapter
+\titleformat{\chapter}[block]
+  {\normalfont\huge\bfseries} % Style of the chapter title
+  {\hspace{0.5em}\thechapter} % Label before the title
+  {0pt} % Space between label and title
+  {\Huge} % Title style
+  [\hrule] % Horizontal rule after the title with spacing
+\titlespacing*{\chapter}
+  {0pt} % Left margin
+  {0pt} % Space before the chapter title
+  {10pt} % Space after the chapter title
+
+% Section
+\titleformat{\section}
+  {\normalfont\Large\bfseries} % Style for sections
+  {\thesection\hspace{1em}} % Label before the title
+  {0pt} % Space between label and title
+  {\Large} % Title style
+\titlespacing*{\section}
+  {0pt} % Left margin
+  {0pt} % Space before the chapter title
+  {10pt} % Space after the chapter title
+
+% Subsection
+\titlespacing*{\subsection}
+  {0pt} % Left margin
+  {0pt} % Space before the chapter title
+  {-2pt} % Space after the chapter title
+
+% BibTex
+\defbibheading{empty}{}
+\addbibresource{reference.bib}
+
+% Information
+\title{\doctitle\ —\, \assignment}
+\author{
+    \authornameA\: \identifyA\\
+    \authornameB\: \identifyB\\
+    \authornameC\: \identifyC\\
+    \authornameD\: \identifyD\\
+}
+\date{}
