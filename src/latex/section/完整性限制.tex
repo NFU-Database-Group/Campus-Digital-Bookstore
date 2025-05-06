@@ -1,36 +1,128 @@
 \chapter{完整性限制}
 
-\begin{itemize}
-    \item 某東西的資料表
-        \begin{table}[h!]
-            \captionsetup{justification=centering}
-            \caption{某東西的資料表}
-            \centering
-            \renewcommand{\arraystretch}{1.2}
-            \begin{tabular}{|c|l|c|c|l|}
-                \hline
-                \textbf{欄位名稱} & \textbf{說明} & \textbf{資料型態} & \textbf{是否為空} & \textbf{值域} \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                欄位名稱 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-                A10:2021 & 說明 & VARCHAR & 否 & OWASP Top 10 \\
-                \hline
-            \end{tabular}
-        \end{table}
-\end{itemize}
+\section{使用者資料表}
+
+\begin{table}[h!]
+\captionsetup{justification=centering}
+\caption{使用者資料表欄位定義}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|l|l|l|c|}
+    \hline
+    欄位名稱 & 欄位說明 & 資料型態 & 值域 & 是否為空 \\
+    \hline
+    UserId & 使用者ID & \texttt{VARCHAR(8)} (8 bytes)  & 八位數字或一字母搭配五位數字  & 否 \\
+    \hline
+    Name   & 姓名     & \texttt{VARCHAR(20)} (20 bytes) & 無特殊符號之非空字串          & 否 \\
+    \hline
+    Email  & 電子郵件 & \texttt{VARCHAR(255)} (255 bytes)& 符合電子郵件格式的字串        & 否 \\
+    \hline
+    \end{tabular}%
+}
+\end{table}
+    
+\section{書城管理員資料表}
+
+\begin{table}[h!]
+    \captionsetup{justification=centering}
+    \caption{書城管理員資料表欄位定義}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|l|l|l|c|}
+        \hline
+        欄位名稱 & 欄位說明 & 資料型態 & 值域 & 是否為空 \\
+        \hline
+        AdminId & 管理員ID   & \texttt{INT(11) UNSIGNED} (4 bytes) & 僅限正整數           & 否 \\
+        \hline
+        Name    & 姓名       & \texttt{VARCHAR(20)} (20 bytes)    & 無特殊符號之非空字串 & 否 \\
+        \hline
+        Email   & 電子郵件   & \texttt{VARCHAR(255)} (255 bytes)  & 符合電子郵件格式的字串 & 否 \\
+        \hline
+        \end{tabular}%
+    }
+\end{table}
+
+\section{書籍資料表}
+
+\begin{table}[h!]
+    \captionsetup{justification=centering}
+    \caption{書籍資料表欄位定義}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|l|l|l|c|}
+        \hline
+        欄位名稱    & 欄位說明 & 資料型態                      & 值域                       & 是否為空 \\
+        \hline
+        BookId      & 書籍ID   & \texttt{INT(11) UNSIGNED} (4 bytes)  & 僅限正整數               & 否       \\
+        \hline
+        Category    & 書籍類型 & \texttt{VARCHAR(255)} (255 bytes)    & 任意非空字串             & 否       \\
+        \hline
+        Hash        & 雜湊值   & \texttt{VARCHAR(16)} (16 bytes)      & 十六進制字元，英文使用小寫 & 否       \\
+        \hline
+        ISBN        & 書籍ISBN & \texttt{VARCHAR(13)} (13 bytes)      & 必須符合 ISBN-13 格式    & 否       \\
+        \hline
+        Amount      & 正本數量 & \texttt{INT(11) UNSIGNED} (4 bytes)  & 僅限正整數               & 否       \\
+        \hline
+        Publisher   & 出版社   & \texttt{VARCHAR(255)} (255 bytes)    & 任意非空字串             & 否       \\
+        \hline
+        ReleaseDate & 出版日期 & \texttt{DATE} (3 bytes)               & yyyy-MM-dd               & 否       \\
+        \hline
+    \end{tabular}%
+    }
+\end{table}
+
+\clearpage
+
+\section{標題資料表}
+
+\begin{table}[h!]
+    \captionsetup{justification=centering}
+    \caption{標題資料表欄位定義}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|p{3cm}|l|p{4cm}|c|}
+        \hline
+        欄位名稱   & 欄位說明                                & 資料型態                              & 值域                    & 是否為空 \\
+        \hline
+        TitleId    & 標題ID                                 & \texttt{INT(11) UNSIGNED} (4 bytes)   & 僅限正整數              & 否       \\
+        \hline
+        BookId     & 參照書籍ID                             & \texttt{INT(11) UNSIGNED} (4 bytes)   & 參考 Book 的 BookId     & 否       \\
+        \hline
+        Language   & ISO 639-1 或 ISO 639-2 格式標記標題語言 & \texttt{VARCHAR(3)} (3 bytes)         & 2～3 個小寫英文字母     & 否       \\
+        \hline
+        TitleName  & 標題文字                               & \texttt{VARCHAR(255)} (255 bytes)     & 任意非空字串            & 否       \\
+        \hline
+    \end{tabular}%
+    }
+\end{table}
+
+\section{借閱副本}
+
+\begin{table}[h!]
+    \captionsetup{justification=centering}
+    \caption{借閱副本資料表欄位定義}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|p{3cm}|l|p{4cm}|c|}
+        \hline
+        欄位名稱   & 欄位說明    & 資料型態                          & 值域                       & 是否為空 \\
+        \hline
+        CopyId     & 副本ID      & \texttt{INT(11) UNSIGNED} (4 bytes)  & 僅限正整數                & 否       \\
+        \hline
+        Hash       & 雜湊值      & \texttt{VARCHAR(16)} (16 bytes)      & 十六進制字元，英文使用小寫  & 否       \\
+        \hline
+        OpenDate   & 借閱日期    & \texttt{DATE} (3 bytes)               & yyyy-MM-dd                & 否       \\
+        \hline
+        ExpireDate & 逾期日期    & \texttt{DATE} (3 bytes)               & yyyy-MM-dd                & 否       \\
+        \hline
+        UserId     & 擁有者      & \texttt{VARCHAR(8)} (8 bytes)         & 參照 User 的 UserId       & 否       \\
+        \hline
+    \end{tabular}%
+    }
+\end{table}
+
