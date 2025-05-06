@@ -1,5 +1,13 @@
-*.pdf
-*.bib
+*.aux
 *.bbl
+*.bib
+*.lof
+*.log
+*.lot
+*.out
+*.pdf
+*.run
+*.run.xml
 *.simp.bak
+*.toc
 *:Zone.Identifier
