@@ -105,48 +105,48 @@
 
   | 欄位名稱 | 欄位說明 | 資料型態                   | 值域                         | 是否為空 |
   |----------|--------|----------------------------|----------------------------|---------|
-  | userId   | 使用者ID | `VARCHAR(8)` (8 bytes)     | 八位數字或一字母搭配五位數字 | 否       |
-  | name     | 姓名     | `VARCHAR(20)` (20 bytes)   | 無特殊符號之非空字串         | 否       |
-  | email    | 電子郵件 | `VARCHAR(255)` (255 bytes) | 符合電子郵件格式的字串       | 否       |
+  | UserId   | 使用者ID | `VARCHAR(8)` (8 bytes)     | 八位數字或一字母搭配五位數字 | 否       |
+  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)   | 無特殊符號之非空字串         | 否       |
+  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes) | 符合電子郵件格式的字串       | 否       |
 
 - **Admin**
 
   | 欄位名稱 | 欄位說明 | 資料型態                     | 值域                   | 是否為空 |
   |----------|--------|------------------------------|----------------------|---------|
-  | adminId  | 管理員ID | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數             | 否       |
-  | name     | 姓名     | `VARCHAR(20)` (20 bytes)     | 無特殊符號之非空字串   | 否       |
-  | email    | 電子郵件 | `VARCHAR(255)` (255 bytes)   | 符合電子郵件格式的字串 | 否       |
+  | AdminId  | 管理員ID | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數             | 否       |
+  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)     | 無特殊符號之非空字串   | 否       |
+  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes)   | 符合電子郵件格式的字串 | 否       |
 
 - **Book**
 
   | 欄位名稱    | 欄位說明 | 資料型態                     | 值域                  | 是否為空 |
   |-------------|--------|------------------------------|-----------------------|---------|
-  | bookId      | 書籍ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
-  | type        | 書籍類型 | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
-  | hash       | 雜湊值   | `VARCHAR(64)`     (64 bytes) | 十六進制字元，英文使用小寫 | 否       |
+  | BookId      | 書籍ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
+  | Category        | 書籍類型 | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
+  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫 | 否       |
   | ISBN        | 書籍ISBN | `VARCHAR(13)`     (13 bytes) | 必須符合 ISBN-13 格式 | 否       |
-  | amount      | 正本數量 | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
-  | publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
-  | releaseDate | 出版日期 | `DATE`            (3 bytes)  | yyyy-MM-dd           | 否       |
+  | Amount      | 正本數量 | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
+  | Publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
+  | ReleaseDate | 出版日期 | `DATE`            (3 bytes)  | yyyy-MM-dd           | 否       |
 
 - **Title**
 
   | 欄位名稱 | 欄位說明                               | 資料型態                      | 值域                | 是否為空 |
   |----------|--------------------------------------|-------------------------------|-------------------|---------|
-  | titleId  | 標題ID                                 | `INT(11) UNSIGNED` (4 bytes)  | 僅限正整數          | 否       |
-  | bookId   | 參照書籍ID                             | `INT(11) UNSIGNED` (4 bytes)  | 參考 Book 的 bookId | 否       |
-  | language | ISO 639-1 或 ISO 639-2格式標記標題語言 | `VARCHAR(3)`        (3 bytes) | 2~3個小寫英文字母   | 否       |
-  | title    | 標題文字                               | `VARCHAR(255)`    (255 bytes) | 任意非空字串        | 否       |
+  | TitleId  | 標題ID                                 | `INT(11) UNSIGNED` (4 bytes)  | 僅限正整數          | 否       |
+  | BookId   | 參照書籍ID                             | `INT(11) UNSIGNED` (4 bytes)  | 參考 Book 的 BookId | 否       |
+  | Language | ISO 639-1 或 ISO 639-2格式標記標題語言 | `VARCHAR(3)`        (3 bytes) | 2~3個小寫英文字母   | 否       |
+  | TitleName    | 標題文字                               | `VARCHAR(255)`    (255 bytes) | 任意非空字串        | 否       |
 
 - **AccessCopy**
 
   | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
   |------------|--------|------------------------------|---------------------|---------|
-  | copyId     | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數          | 否       |
-  | hash       | 雜湊值   | `VARCHAR(64)`     (64 bytes) | 十六進制字元，英文使用小寫 | 否       |
-  | openDate   | 借閱日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
-  | expireDate | 逾期日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
-  | owner      | 擁有者   | `VARCHAR(8)`       (8 bytes) | 參照 User 的 userId | 否       |
+  | CopyId     | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數          | 否       |
+  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫 | 否       |
+  | OpenDate   | 借閱日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
+  | ExpireDate | 逾期日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
+  | UserId      | 擁有者   | `VARCHAR(8)`       (8 bytes) | 參照 User 的 UserId | 否       |
 
 ## ERD及詳細說明
 
@@ -187,17 +187,17 @@
    - 屬性
      - TitleId (**主鍵**；標題ID)
      - BookId (**外鍵**；連結到Book資料表)
-     - language (標題語言)
-     - title (標題文字)
+     - Language (標題語言)
+     - Title (標題文字)
    - 關聯
-     - contain：標題包含一個書籍
+     - Contain：標題包含一個書籍
 
 5. **AccessCopy**
    - 屬性
      - CopyId（**主鍵**；副本ID）
      - OpenDate（借閱日期）
      - ExpireDate（逾期日期）
-     - Owner（擁有者）
+     - UserId（擁有者）
    - 關聯
      - read：副本被一位使用者閱讀
      - copy of：副本對應一本原始書籍（Book）
@@ -209,3 +209,4 @@
 3. 「User」與「AccessCopy」有一對多（0..N）閱讀關係（read），一位使用者可以閱讀零至多份副本（0..N），而每份副本只能被一位使用者閱讀（1）。
 4. 「Admin」與「Book」有一對多（1..N）管理關係（maintain），一位管理員可以管理一至多本書（1..N），而一本書可以沒有管理員維護（0）。
 5. 「AccessCopy」與「Book」有一對多（1..N）來源關係（copy of），一本書可以被複製成零至多份副本（0..N），而每份副本只能對應一本書籍（1），並記錄複製時間戳記。
+6. 「Book」與「Title」有一對多（1..N）個書名（contain），一本書可以有多個不同翻譯的書名（0..N），而每個標題只有對應一本書（1）。
