@@ -119,10 +119,12 @@
   | 欄位名稱    | 欄位說明 | 資料型態                     | 值域                  | 是否為空 |
   |-------------|--------|------------------------------|-----------------------|---------|
   | bookId      | 書籍ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
+  | type        | 書籍類型 | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
+  | hash       | 雜湊值   | `VARCHAR(64)`     (64 bytes) | 十六進制字元，英文使用小寫 | 否       |
   | ISBN        | 書籍ISBN | `VARCHAR(13)`     (13 bytes) | 必須符合 ISBN-13 格式 | 否       |
   | amount      | 正本數量 | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
   | publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
-  | releaseDate | 出版日期 | `DATE`            (3 bytes)  | yyyy-MM-dd            | 否       |
+  | releaseDate | 出版日期 | `DATE`            (3 bytes)  | yyyy-MM-dd           | 否       |
 
 - **Title**
   | 欄位名稱 | 欄位說明                               | 資料型態                      | 值域                | 是否為空 |
@@ -136,6 +138,7 @@
   | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
   |------------|--------|------------------------------|---------------------|---------|
   | copyId     | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數          | 否       |
+  | hash       | 雜湊值   | `VARCHAR(64)`     (64 bytes) | 十六進制字元，英文使用小寫 | 否       |
   | openDate   | 借閱日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
   | expireDate | 逾期日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
   | owner      | 擁有者   | `VARCHAR(8)`       (8 bytes) | 參照 User 的 userId | 否       |
