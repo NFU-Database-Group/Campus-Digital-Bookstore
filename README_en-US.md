@@ -4,15 +4,17 @@
 
 G02 Campus Digital Books
 
+## Report
+
+Please use the following media to read the written report for this project:
+
+- [PDF Report](https://github.com/NFU-Database-Group/Campus-Digital-Bookstore/releases/download/1.0/Campus-Digital-Bookstore.pdf)
+- [Markdown Report](./docs/partI/README.md)
+
 ## Works
 
-- [Issues](https://github.com/NFU-Database-Group/Project-Library/issues)
+- [Issue](https://github.com/NFU-Database-Group/Project-Library/issues)
 - [Discussion](https://github.com/NFU-Database-Group/Project-Library/discussions)
-
-## Assignments
-
-- [Markdown Page](./docs/partI/README.md)
-- [Slides](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
 
 ### Part I
 

@@ -4,15 +4,17 @@
 
 G02 校園數位書城
 
-## 成果
+## 報告
+
+請使用以下媒體閱讀本專題的文書報告：
+
+- [PDF 報告](https://github.com/NFU-Database-Group/Campus-Digital-Bookstore/releases/download/1.0/Campus-Digital-Bookstore.pdf)
+- [Markdown 報告](./docs/partI/README.md)
+
+## 進度
 
 - [Issue](https://github.com/NFU-Database-Group/Project-Library/issues)
 - [討論區](https://github.com/NFU-Database-Group/Project-Library/discussions)
-
-## 作業
-
-- [Markdown 頁面](./docs/partI/README.md)
-- [簡報](https://docs.google.com/presentation/d/1CVXu3zMMaOMTS-JVP_-2jTPVOu2q0zPUNoqi1U4R_xA/edit?usp=sharing)
 
 ### Part I
 
