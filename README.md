@@ -4,6 +4,10 @@
 
 G02 校園數位書城
 
+> [!IMPORTANT]
+> 5/14 課堂作業在：
+> <https://github.com/NFU-Database-Group/Order-Practice>
+
 ## 報告
 
 請使用以下媒體閱讀本專題的文書報告：
