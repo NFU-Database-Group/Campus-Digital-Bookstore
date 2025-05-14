@@ -39,7 +39,7 @@ Please use the following media to read the written report for this project:
 
 ## Members
 
-[Introduction](./Docs/members/README.md)  
+[Introduction](./docs/members/README.md)  
 
 - 41143263 黃柏菻 [@LTurret](https://github.com/LTurret)
 - 41143264 楊育哲 [@kiol1812](https://github.com/kiol1812)

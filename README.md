@@ -39,7 +39,7 @@ G02 校園數位書城
 
 ## 成員
 
-[成員介紹](./Docs/members/README.md)  
+[成員介紹](./docs/members/README.md)  
 
 - 41143263 黃柏菻 [@LTurret](https://github.com/LTurret)
 - 41143264 楊育哲 [@kiol1812](https://github.com/kiol1812)
