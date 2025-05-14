@@ -14,15 +14,15 @@
 \begin{enumerate}
 \item 屬性
     \begin{itemize}
-    \item UserId（\textbf{主鍵}；使用者ID）
+    \item UserId（\textbf{主鍵}；學生ID）
     \item Name（姓名）
     \item Email（電子郵件）
     \end{itemize}
 \item 關聯
     \begin{itemize}
-    \item is\_managed\_by：使用者被零或一位管理員管理
-    \item rent：使用者借閱零至多份副本（AccessCopy）
-    \item read：使用者可閱讀零至多份副本（AccessCopy）
+    \item is\_managed\_by：學生被零或一位管理員管理
+    \item rent：學生借閱零至多份副本（AccessCopy）
+    \item read：學生可閱讀零至多份副本（AccessCopy）
     \end{itemize}
 \end{enumerate}
 
@@ -35,7 +35,7 @@
     \end{itemize}
 \item 關聯
     \begin{itemize}
-    \item is\_managed\_by：管理員管理一至多位使用者
+    \item is\_managed\_by：管理員管理一至多位學生
     \item maintain：管理員管理一至多本書籍
     \end{itemize}
 \end{enumerate}
@@ -87,7 +87,7 @@
     \end{itemize}
 \item 關聯
     \begin{itemize}
-    \item read：副本被一位使用者閱讀
+    \item read：副本被一位學生閱讀
     \item copy of：副本對應一本原始書籍（Book）
     \end{itemize}
 \end{enumerate}
@@ -98,11 +98,11 @@
 
 \begin{enumerate}
     \item 「User」與「Admin」有一對多 (1..N) 管理關係（is\_managed\_by）：  
-      一位使用者可以被零或一位管理員管理（0..1），而一位管理員可以管理一至多位使用者（1..N）。
+      一位學生可以被零或一位管理員管理（0..1），而一位管理員可以管理一至多位學生（1..N）。
     \item 「User」與「AccessCopy」有一對多 (0..N) 借閱關係（rent）：  
-      一位使用者可以借閱零至多份副本（0..N），而每一份副本只能被一位使用者借出（1）。
+      一位學生可以借閱零至多份副本（0..N），而每一份副本只能被一位學生借出（1）。
     \item 「User」與「AccessCopy」有一對多 (0..N) 閱讀關係（read）：  
-      一位使用者可以閱讀零至多份副本（0..N），而每份副本只能被一位使用者閱讀（1）。
+      一位學生可以閱讀零至多份副本（0..N），而每份副本只能被一位學生閱讀（1）。
     \item 「Admin」與「Book」有一對多 (1..N) 管理關係（maintain）：  
       一位管理員可以管理一至多本書（1..N），而一本書可以沒有管理員維護（0）。
     \item 「AccessCopy」與「Book」有一對多 (0..N) 來源關係（copy of）：  

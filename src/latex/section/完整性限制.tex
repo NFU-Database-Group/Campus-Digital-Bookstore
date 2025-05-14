@@ -1,10 +1,10 @@
 \chapter{完整性限制}
 
-\section{使用者資料表}
+\section{學生資料表}
 
 \begin{table}[h!]
 \captionsetup{justification=centering}
-\caption{使用者資料表欄位定義}
+\caption{學生資料表欄位定義}
 \centering
 \renewcommand{\arraystretch}{1.2}
 \resizebox{\textwidth}{!}{%
@@ -12,7 +12,7 @@
     \hline
     欄位名稱 & 欄位說明 & 資料型態 & 值域 & 是否為空 \\
     \hline
-    UserId & 使用者ID & \texttt{VARCHAR(8)} (8 bytes)  & 八位數字或一字母搭配五位數字  & 否 \\
+    UserId & 學生ID & \texttt{VARCHAR(8)} (8 bytes)  & 八位數字或一字母搭配五位數字  & 否 \\
     \hline
     Name   & 姓名     & \texttt{VARCHAR(20)} (20 bytes) & 無特殊符號之非空字串          & 否 \\
     \hline
