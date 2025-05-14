@@ -1,10 +1,10 @@
-# Part I
+# Campus Digital Bookstore
 
 [討論(Github Issue)](https://github.com/NFU-Database-Group/Project-Library/issues/1)
 
 ## 目錄
 
-- [Part I](#part-i)
+- [Campus Digital Bookstore](#campus-digital-bookstore)
   - [目錄](#目錄)
   - [應用情境](#應用情境)
   - [使用案例](#使用案例)
