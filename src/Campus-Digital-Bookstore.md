@@ -1,7 +1,5 @@
 # Campus Digital Bookstore
 
-[討論(Github Issue)](https://github.com/NFU-Database-Group/Project-Library/issues/1)
-
 ## 目錄
 
 - [Campus Digital Bookstore](#campus-digital-bookstore)
