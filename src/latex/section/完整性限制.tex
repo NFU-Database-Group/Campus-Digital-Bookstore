@@ -68,7 +68,7 @@
         \hline
         Publisher   & 出版社   & \texttt{VARCHAR(255)} (255 bytes)    & 任意非空字串             & 否       \\
         \hline
-        ReleaseDate & 出版日期 & \texttt{DATE} (3 bytes)               & yyyy-MM-dd               & 否       \\
+        ReleaseDate & 出版日期 & \texttt{DATE} (3 bytes)               & YYYY-MM-DD               & 否       \\
         \hline
     \end{tabular}%
     }
@@ -116,9 +116,9 @@
         \hline
         Hash       & 雜湊值      & \texttt{VARCHAR(16)} (16 bytes)      & 十六進制字元，英文使用小寫  & 否       \\
         \hline
-        OpenDate   & 借閱日期    & \texttt{DATE} (3 bytes)               & yyyy-MM-dd                & 否       \\
+        OpenDate   & 借閱日期    & \texttt{DATE} (3 bytes)               & YYYY-MM-DD                & 否       \\
         \hline
-        ExpireDate & 逾期日期    & \texttt{DATE} (3 bytes)               & yyyy-MM-dd                & 否       \\
+        ExpireDate & 逾期日期    & \texttt{DATE} (3 bytes)               & YYYY-MM-DD                & 否       \\
         \hline
         UserId     & 擁有者      & \texttt{VARCHAR(8)} (8 bytes)         & 參照 User 的 UserId       & 否       \\
         \hline
