@@ -142,13 +142,43 @@
 
 ## 完整性限制
 
-- **User**
+### **User**
 
   | 欄位名稱 | 欄位說明 | 資料型態                   | 值域                         | 是否為空 |
   |----------|--------|----------------------------|----------------------------|---------|
-  | UserId   | 學生ID | `VARCHAR(8)` (8 bytes)     | 八位數字或一字母搭配五位數字 | 否       |
-  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)   | 無特殊符號之非空字串         | 否       |
-  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes) | 符合電子郵件格式的字串       | 否       |
+  | UserId   | 學生ID | `VARCHAR(8)` (8 bytes)     | 第一碼：只能是 4 或 5、第二、三碼：必須為兩位數字，範圍從 01 到 99、第四碼：固定為 4、第五碼：只能是 0–9（任一數字）、第六碼：只能是 0–3（任一數字）、第七、八碼：必須為兩位數字，範圍從 01 到 99 | 否       |
+  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)   | 無特殊符號之非空字串，允許英文、中文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`         | 否       |
+  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes) | 學校電子郵件格式，學號 + `@nfu.edu.tw`，學號值域參見 `UserId`       | 否       |
+
+- 成功輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143281, '陳小明', '41143281@nfu.edu.tw');
+  Query OK, 1 row affected (0.006 sec)
+
+  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143282, 'Smith', '41143282@nfu.edu.tw');
+  Query OK, 1 row affected (0.009 sec)
+
+  MariaDB [cdb_db]> select * from users;
+  +----------+-----------+---------------------+
+  | UserId   | Name      | Email               |
+  +----------+-----------+---------------------+
+  | 41143281 | 陳小明    | 41143281@nfu.edu.tw |
+  | 41143282 | Smith     | 41143282@nfu.edu.tw |
+  +----------+-----------+---------------------+
+  2 rows in set (0.007 sec)
+  ```
+
+- 錯誤輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (12345678, 'Smith', '41143283@nfu.edu.tw');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`users`
+  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143283, 'Smith@123', '41143283@nfu.edu.tw');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_2` failed for `cdb_db`.`users`
+  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143283, 'Smith', '41143283@npu.edu.tw');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`users`
+  ```
 
 - **Admin**
 
