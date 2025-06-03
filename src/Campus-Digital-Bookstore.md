@@ -153,13 +153,13 @@
 - 成功輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143281, '陳小明', '41143281@nfu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143281, '陳小明', '41143281@nfu.edu.tw');
   Query OK, 1 row affected (0.006 sec)
 
-  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143282, 'Smith', '41143282@nfu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143282, 'Smith', '41143282@nfu.edu.tw');
   Query OK, 1 row affected (0.009 sec)
 
-  MariaDB [cdb_db]> select * from users;
+  MariaDB [cdb_db]> SELECT * FROM users;
   +----------+-----------+---------------------+
   | UserId   | Name      | Email               |
   +----------+-----------+---------------------+
@@ -172,11 +172,11 @@
 - 錯誤輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (12345678, 'Smith', '41143283@nfu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (12345678, 'Smith', '41143283@nfu.edu.tw');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`users`
-  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143283, 'Smith@123', '41143283@nfu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143283, 'Smith@123', '41143283@nfu.edu.tw');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_2` failed for `cdb_db`.`users`
-  MariaDB [cdb_db]> insert into users (UserId, Name, Email) Values (41143283, 'Smith', '41143283@npu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143283, 'Smith', '41143283@npu.edu.tw');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`users`
   ```
 
@@ -191,8 +191,8 @@
 - 成功輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into admin (Name, Email) Values ('陳曉明', '41143281@nfu.edu.tw');
-  MariaDB [cdb_db]> select * from admin;
+  MariaDB [cdb_db]> INSERT INTO admin (Name, Email) VALUES ('陳曉明', '41143281@nfu.edu.tw');
+  MariaDB [cdb_db]> SELECT * FROM admin;
   +---------+-----------+---------------------+
   | AdminId | Name      | Email               |
   +---------+-----------+---------------------+
@@ -204,9 +204,9 @@
 - 錯誤輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into admin (Name, Email) Values ('陳曉明@123', '41143281@nfu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO admin (Name, Email) VALUES ('陳曉明@123', '41143281@nfu.edu.tw');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`admin`
-  MariaDB [cdb_db]> insert into admin (Name, Email) Values ('陳曉明', '41143281@npu.edu.tw');
+  MariaDB [cdb_db]> INSERT INTO admin (Name, Email) VALUES ('陳曉明', '41143281@npu.edu.tw');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_2` failed for `cdb_db`.`admin`
   ```
 
@@ -214,24 +214,24 @@
 
   | 欄位名稱    | 欄位說明 | 資料型態                     | 值域                  | 是否為空 |
   |-------------|--------|------------------------------|-----------------------|---------|
-  | BookId      | 書籍ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
-  | Category        | 書籍類型 | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
-  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫 | 否       |
-  | ISBN        | 書籍ISBN | `VARCHAR(13)`     (13 bytes) | 必須符合 ISBN-13 格式 | 否       |
-  | Amount      | 正本數量 | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數            | 否       |
-  | Publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
-  | ReleaseDate | 出版日期 | `DATE`            (3 bytes)  | yyyy-MM-dd           | 否       |
+  | BookId      | 書籍ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$            | 否       |
+  | Category        | 書籍類型 | `VARCHAR(255)`   (255 bytes) | 非空字串，允許中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`          | 否       |
+  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫或大寫都可以 | 否       |
+  | ISBN        | 書籍ISBN | `VARCHAR(13)`     (13 bytes) | 符合 ISBN-13 或 ISBN-10格式，ISBN-13 需以978或979開頭，接著十位數字；ISBN-10 則是九位數字接著一位數字或字母X或x | 否       |
+  | Amount      | 正本數量 | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$            | 否       |
+  | Publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 非空字串，允許中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`          | 否       |
+  | ReleaseDate | 出版日期 | `DATE`            (3 bytes)  | 依照日期格式 yyyy-mm-dd 填入數字           | 否       |
 
 - 成功輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into `book` (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) Values
+  MariaDB [cdb_db]> INSERT INTO `book` (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) VALUES
       -> ('科學', '1234567890abcdef', '9781234567890', 5, '科學出版社', '2023-01-01'),
       -> ('文學', 'fedcba0987654321', '9791234567890', 3, '文學出版社', '2022-12-31');
   Query OK, 2 rows affected (0.021 sec)
   Records: 2  Duplicates: 0  Warnings: 0
 
-  MariaDB [cdb_db]> select * from book;
+  MariaDB [cdb_db]> SELECT * FROM book;
   +--------+----------+------------------+---------------+--------+-----------------+-------------+
   | BookId | Category | Hash             | ISBN          | Amount | Publisher       | ReleaseDate |
   +--------+----------+------------------+---------------+--------+-----------------+-------------+
@@ -244,7 +244,7 @@
 - 錯誤輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into book (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) Values ('科學', 'abca123764feab22', '1231231231231', 7, '科學出版社', '2022-09-09');
+  MariaDB [cdb_db]> INSERT INTO book (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) VALUES ('科學', 'abca123764feab22', '1231231231231', 7, '科學出版社', '2022-09-09');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`book`
   ```
 
@@ -252,10 +252,10 @@
 
   | 欄位名稱 | 欄位說明                               | 資料型態                      | 值域                | 是否為空 |
   |----------|--------------------------------------|-------------------------------|-------------------|---------|
-  | TitleId  | 標題ID                                 | `INT(11) UNSIGNED` (4 bytes)  | 僅限正整數          | 否       |
+  | TitleId  | 標題ID                                 | `INT(11) UNSIGNED` (4 bytes)  | 僅限正整數 0 ~ $10^{11}-1$          | 否       |
   | BookId   | 參照書籍ID                             | `INT(11) UNSIGNED` (4 bytes)  | 參考 Book 的 BookId | 否       |
-  | Language | ISO 639-1 或 ISO 639-2格式標記標題語言 | `VARCHAR(3)`        (3 bytes) | 2~3個小寫英文字母   | 否       |
-  | TitleName    | 標題文字                               | `VARCHAR(255)`    (255 bytes) | 任意非空字串        | 否       |
+  | Language | ISO 639-1 或 ISO 639-2 格式標記標題語言 | `VARCHAR(3)`        (3 bytes) | 二至三個小寫英文字母，第一個字母可以是大寫   | 否       |
+  | TitleName    | 標題文字                               | `VARCHAR(255)`    (255 bytes) | 非空字串，允許中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`        | 否       |
 
 - 成功輸入範例
 
@@ -283,9 +283,9 @@
 - 錯誤輸入範例
 
   ```bash
-  MariaDB [cdb_db]> insert into title (BookId, Language, TitleName) Values ('1', 'zh-TW', '科學探索');
+  MariaDB [cdb_db]> INSERT INTO title (BookId, Language, TitleName) VALUES ('1', 'zh-TW', '科學探索');
   ERROR 1406 (22001): Data too long for column 'Language' at row 1
-  MariaDB [cdb_db]> insert into title (BookId, Language, TitleName) Values ('1', 'zh@', '科學探索');
+  MariaDB [cdb_db]> INSERT INTO title (BookId, Language, TitleName) VALUES ('1', 'zh@', '科學探索');
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`title`
   ```
 
@@ -293,10 +293,10 @@
 
   | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
   |------------|--------|------------------------------|---------------------|---------|
-  | CopyId     | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數          | 否       |
-  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫 | 否       |
-  | OpenDate   | 借閱日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
-  | ExpireDate | 逾期日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
+  | CopyId     | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$          | 否       |
+  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫或大寫字母都可以 | 否       |
+  | OpenDate   | 借閱日期 | `DATE`             (3 bytes) | 依照日期格式 yyyy-mm-dd 填入數字           | 否       |
+  | ExpireDate | 逾期日期 | `DATE`             (3 bytes) | 依照日期格式 yyyy-mm-dd 填入數字           | 否       |
   | UserId      | 擁有者   | `VARCHAR(8)`       (8 bytes) | 參照 User 的 UserId | 否       |
 
 - 成功輸入範例
@@ -308,7 +308,7 @@
   Query OK, 2 rows affected (0.015 sec)
   Records: 2  Duplicates: 0  Warnings: 0
 
-  MariaDB [cdb_db]> select * from copy;
+  MariaDB [cdb_db]> SELECT * FROM copy;
   +--------+------------+------------+----------+-------+
   | CopyId | OpenDate   | ExpireDate | Owner    | Title |
   +--------+------------+------------+----------+-------+
@@ -327,6 +327,13 @@
 
 ### **Note**
 
+  | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
+  |------------|--------|------------------------------|---------------------|---------|
+  | NoteId     | 螢光筆記ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$          | 否       |
+  | LineStart | 起始位置 | `DECIMAL(5,2)` (5 bytes) | 不允許負數，範圍從 0 到 300.00 | 否       |
+  | LineEnd   | 結束位置 | `DECIMAL(5,2)` (5 bytes) | 不允許負數，範圍從 0 到 300.00 | 否       |
+  | Copy      | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 參照 AccessCopy 的 CopyId | 否       |
+
 - 成功輸入範例
 
   ```bash
@@ -336,7 +343,7 @@
   Query OK, 2 rows affected (0.022 sec)
   Records: 2  Duplicates: 0  Warnings: 0
 
-  MariaDB [cdb_db]> select * from note;
+  MariaDB [cdb_db]> SELECT * FROM note;
   +--------+-----------+---------+------+
   | NoteId | LineStart | LineEnd | Copy |
   +--------+-----------+---------+------+
