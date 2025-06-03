@@ -5,7 +5,7 @@
 G02 Campus Digital Books
 
 > [!IMPORTANT]
-> 5/14 Assignment is located at this repository:
+> 5/14 Assignment repository:
 > <https://github.com/NFU-Database-Group/Order-Practice>
 
 ## Report

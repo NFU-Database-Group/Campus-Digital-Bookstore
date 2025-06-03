@@ -5,7 +5,7 @@
 G02 校園數位書城
 
 > [!IMPORTANT]
-> 5/14 課堂作業在：
+> 5/14 訂單系統作業：
 > <https://github.com/NFU-Database-Group/Order-Practice>
 
 ## 報告
