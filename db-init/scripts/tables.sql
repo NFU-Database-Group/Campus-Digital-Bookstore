@@ -15,7 +15,7 @@ CREATE TABLE `admin` (
     `AdminId` INT AUTO_INCREMENT PRIMARY KEY,
     `Name` VARCHAR(20) NOT NULL UNIQUE,
     `Email` VARCHAR(255) NOT NULL UNIQUE,
-    CHECK (`Name` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-()]+$'),
+    CHECK (`Name` REGEXP '^[A-Za-z一-龥·・\\-()]+$'),
     CHECK (`Email` REGEXP '[0-9a-zA-Z].+\@nfu\.edu\.tw')
 );
 
@@ -29,17 +29,17 @@ CREATE TABLE `book` (
     `ReleaseDate` DATE NOT NULL,
     UNIQUE (`Hash`),
     UNIQUE (`ISBN`),
-    CHECK (`Category` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-() ]+$'),
+    CHECK (`Category` REGEXP '^[A-Za-z一-龥·・\\-()]+$'),
     CHECK (`Hash` REGEXP '^[A-Fa-f0-9]{16}$'),
     CHECK (`ISBN` REGEXP '^(978|979)[0-9]{10}$'),
-    CHECK (`Publisher` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-() ]+$'),
-    CHECK (`ReleaseDate` <= CURDATE())
+    CHECK (`Publisher` REGEXP '^[A-Za-z一-龥·・\\-()]+$')
 );
 
 CREATE TABLE `title` (
     `TitleId` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `BookId` INT(11) UNSIGNED NOT NULL,
     `Language` VARCHAR(3) NOT NULL,
+    `TitleName` VARCHAR(255) NOT NULL,
     FOREIGN KEY (`BookId`) REFERENCES `book`(`BookId`) ON DELETE CASCADE,
     CHECK (`Language` REGEXP '^[A-Za-z][a-z]{1,2}$')
 );
@@ -48,8 +48,8 @@ CREATE TABLE `copy` (
     `CopyId` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `OpenDate` DATE NOT NULL,
     `ExpireDate` DATE NOT NULL,
-    `Owner` INT(11) UNSIGNED NOT NULL,
-    `Title` INT(11) UNSIGNED NOT NULL
+    `Owner` INT NOT NULL,
+    `Title` INT(11) UNSIGNED NOT NULL,
     FOREIGN KEY (`Owner`) REFERENCES `users`(`UserId`) ON DELETE CASCADE,
     FOREIGN KEY (`Title`) REFERENCES `title`(`TitleId`) ON DELETE CASCADE,
     CHECK (`OpenDate` <= `ExpireDate`)

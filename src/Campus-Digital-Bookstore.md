@@ -180,15 +180,37 @@
   ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`users`
   ```
 
-- **Admin**
+### **Admin**
 
   | 欄位名稱 | 欄位說明 | 資料型態                     | 值域                   | 是否為空 |
   |----------|--------|------------------------------|----------------------|---------|
   | AdminId  | 管理員ID | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數             | 否       |
-  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)     | 無特殊符號之非空字串   | 否       |
-  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes)   | 符合電子郵件格式的字串 | 否       |
+  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)     | 無特殊符號之非空字串，允許英文、中文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`   | 否       |
+  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes)   | 學校電子郵件格式，學號 + `@nfu.edu.tw`，學號值域參見 `UserId` | 否       |
 
-- **Book**
+- 成功輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into admin (Name, Email) Values ('陳曉明', '41143281@nfu.edu.tw');
+  MariaDB [cdb_db]> select * from admin;
+  +---------+-----------+---------------------+
+  | AdminId | Name      | Email               |
+  +---------+-----------+---------------------+
+  |       1 | 陳曉明    | 41143281@nfu.edu.tw |
+  +---------+-----------+---------------------+
+  1 row in set (0.004 sec)
+  ```
+
+- 錯誤輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into admin (Name, Email) Values ('陳曉明@123', '41143281@nfu.edu.tw');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`admin`
+  MariaDB [cdb_db]> insert into admin (Name, Email) Values ('陳曉明', '41143281@npu.edu.tw');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_2` failed for `cdb_db`.`admin`
+  ```
+
+### **Book**
 
   | 欄位名稱    | 欄位說明 | 資料型態                     | 值域                  | 是否為空 |
   |-------------|--------|------------------------------|-----------------------|---------|
@@ -200,7 +222,33 @@
   | Publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 任意非空字串          | 否       |
   | ReleaseDate | 出版日期 | `DATE`            (3 bytes)  | yyyy-MM-dd           | 否       |
 
-- **Title**
+- 成功輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into `book` (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) Values
+      -> ('科學', '1234567890abcdef', '9781234567890', 5, '科學出版社', '2023-01-01'),
+      -> ('文學', 'fedcba0987654321', '9791234567890', 3, '文學出版社', '2022-12-31');
+  Query OK, 2 rows affected (0.021 sec)
+  Records: 2  Duplicates: 0  Warnings: 0
+
+  MariaDB [cdb_db]> select * from book;
+  +--------+----------+------------------+---------------+--------+-----------------+-------------+
+  | BookId | Category | Hash             | ISBN          | Amount | Publisher       | ReleaseDate |
+  +--------+----------+------------------+---------------+--------+-----------------+-------------+
+  |      1 | 科學     | 1234567890abcdef | 9781234567890 |      5 | 科學出版社      | 2023-01-01  |
+  |      2 | 文學     | fedcba0987654321 | 9791234567890 |      3 | 文學出版社      | 2022-12-31  |
+  +--------+----------+------------------+---------------+--------+-----------------+-------------+
+  2 rows in set (0.008 sec)
+  ```
+
+- 錯誤輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into book (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) Values ('科學', 'abca123764feab22', '1231231231231', 7, '科學出版社', '2022-09-09');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`book`
+  ```
+
+### **Title**
 
   | 欄位名稱 | 欄位說明                               | 資料型態                      | 值域                | 是否為空 |
   |----------|--------------------------------------|-------------------------------|-------------------|---------|
@@ -209,7 +257,39 @@
   | Language | ISO 639-1 或 ISO 639-2格式標記標題語言 | `VARCHAR(3)`        (3 bytes) | 2~3個小寫英文字母   | 否       |
   | TitleName    | 標題文字                               | `VARCHAR(255)`    (255 bytes) | 任意非空字串        | 否       |
 
-- **AccessCopy**
+- 成功輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> INSERT INTO `title` (`BookId`, `Language`, `TitleName`) VALUES
+      -> (1, 'zh', '科學探索'),
+      -> (1, 'en', 'Scientific Exploration'),
+      -> (2, 'zh', '文學之旅'),
+      -> (2, 'en', 'Literary Journey');
+  Query OK, 4 rows affected (0.084 sec)
+  Records: 4  Duplicates: 0  Warnings: 0
+
+  MariaDB [cdb_db]> SELECT * FROM title;
+  +---------+--------+----------+------------------------+
+  | TitleId | BookId | Language | TitleName              |
+  +---------+--------+----------+------------------------+
+  |       1 |      1 | zh       | 科學探索               |
+  |       2 |      1 | en       | Scientific Exploration |
+  |       3 |      2 | zh       | 文學之旅               |
+  |       4 |      2 | en       | Literary Journey       |
+  +---------+--------+----------+------------------------+
+  4 rows in set (0.022 sec)
+  ```
+
+- 錯誤輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> insert into title (BookId, Language, TitleName) Values ('1', 'zh-TW', '科學探索');
+  ERROR 1406 (22001): Data too long for column 'Language' at row 1
+  MariaDB [cdb_db]> insert into title (BookId, Language, TitleName) Values ('1', 'zh@', '科學探索');
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`title`
+  ```
+
+### **AccessCopy**
 
   | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
   |------------|--------|------------------------------|---------------------|---------|
@@ -218,6 +298,60 @@
   | OpenDate   | 借閱日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
   | ExpireDate | 逾期日期 | `DATE`             (3 bytes) | yyyy-MM-dd          | 否       |
   | UserId      | 擁有者   | `VARCHAR(8)`       (8 bytes) | 參照 User 的 UserId | 否       |
+
+- 成功輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> INSERT INTO `copy` (`OpenDate`, `ExpireDate`, `Owner`, `Title`) VALUES
+      -> ('2025-06-04', '2025-06-18', 41143281, 1),
+      -> ('2025-06-02', '2025-06-16', 41143282, 2);
+  Query OK, 2 rows affected (0.015 sec)
+  Records: 2  Duplicates: 0  Warnings: 0
+
+  MariaDB [cdb_db]> select * from copy;
+  +--------+------------+------------+----------+-------+
+  | CopyId | OpenDate   | ExpireDate | Owner    | Title |
+  +--------+------------+------------+----------+-------+
+  |      1 | 2025-06-04 | 2025-06-18 | 41143281 |     1 |
+  |      2 | 2025-06-02 | 2025-06-16 | 41143282 |     2 |
+  +--------+------------+------------+----------+-------+
+  2 rows in set (0.016 sec)
+  ```
+
+- 錯誤輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> INSERT INTO `copy` (`OpenDate`, `ExpireDate`, `Owner`, `Title`) VALUES ('2025-06-04', '2024-06-18', 41143281, 1);
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`copy`
+  ```
+
+### **Note**
+
+- 成功輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> INSERT INTO `note` (`LineStart`, `LineEnd`, `Copy`) VALUES
+      -> (1.0, 2.0, 1),
+      -> (3.5, 4.5, 2);
+  Query OK, 2 rows affected (0.022 sec)
+  Records: 2  Duplicates: 0  Warnings: 0
+
+  MariaDB [cdb_db]> select * from note;
+  +--------+-----------+---------+------+
+  | NoteId | LineStart | LineEnd | Copy |
+  +--------+-----------+---------+------+
+  |      1 |      1.00 |    2.00 |    1 |
+  |      2 |      3.50 |    4.50 |    2 |
+  +--------+-----------+---------+------+
+  2 rows in set (0.007 sec)
+  ```
+
+- 錯誤輸入範例
+
+  ```bash
+  MariaDB [cdb_db]> INSERT INTO `note` (`LineStart`, `LineEnd`, `Copy`) VALUES (-1.0, 2.0, 1);
+  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`note`
+  ```
 
 ## ERD及詳細說明
 
