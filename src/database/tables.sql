@@ -14,12 +14,8 @@ CREATE TABLE `User` (
     CHECK (
         `Email` REGEXP '^([A-Za-z0-9._%+-]+)(@)([A-Za-z0-9.-]+)\.([A-Za-z]{2,})$'
     ),
-    CHECK (
-        `Name` REGEXP '^[A-Za-z一-龥·・\\\-()]+$'
-    ),
-    CHECK (
-        `NickName` REGEXP '^[A-Za-z一-龥·・\\\-()]{5,25}$'
-    ),
+    CHECK (`Name` REGEXP '^[A-Za-z一-龥·・\\\-()]+$'),
+    CHECK (`NickName` REGEXP '^[A-Za-z一-龥·・\\\-()]{5,25}$'),
     CHECK (`Status` REGEXP 'pause|normal|pending')
 );
 
@@ -52,9 +48,7 @@ CREATE TABLE `Book` (
     CHECK (
         `ISBN` REGEXP '^(978)(957|986|[0-9]{3})([0-9]{2,5})([0-9]{2,5})[0-9]$'
     ),
-    CHECK (
-        `Publisher` REGEXP '^[A-Za-z一-龥·・\\-() ]+$'
-    )
+    CHECK (`Publisher` REGEXP '^[A-Za-z一-龥·・\\-() ]+$')
 );
 
 CREATE TABLE `AccessCopy` (
