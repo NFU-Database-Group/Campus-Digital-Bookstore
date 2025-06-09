@@ -15,10 +15,10 @@ CREATE TABLE `User` (
         `Email` REGEXP '^([A-Za-z0-9._%+-]+)(@)([A-Za-z0-9.-]+)\.([A-Za-z]{2,})$'
     ),
     CHECK (
-        `Name` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-()]{1,20}$'
+        `Name` REGEXP '^[A-Za-z一-龥·・\\\-()]+$'
     ),
     CHECK (
-        `NickName` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-()]{5,25}$'
+        `NickName` REGEXP '^[A-Za-z一-龥·・\\\-()]{5,25}$'
     ),
     CHECK (`Status` REGEXP 'pause|normal|pending')
 );
@@ -28,12 +28,12 @@ CREATE TABLE `Admin` (
     `Email` VARCHAR(255) NOT NULL,
     `NickName` VARCHAR(25) NOT NULL,
     CHECK (
-        CAST(`AdminId` AS CHAR) REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])$'
+        `AdminId` REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])([0-9][0-9])(1|2|3)([0-9][1-9]|[1-9][0-9])$'
     ),
     CHECK (
         `Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
     ),
-    CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$')
+    CHECK (`NickName` REGEXP '^[A-Za-z一-龥·・\\\-()]{5,25}$')
 );
 
 CREATE TABLE `Book` (
@@ -53,7 +53,7 @@ CREATE TABLE `Book` (
         `ISBN` REGEXP '^(978)(957|986|[0-9]{3})([0-9]{2,5})([0-9]{2,5})[0-9]$'
     ),
     CHECK (
-        `Publisher` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-() ]+$'
+        `Publisher` REGEXP '^[A-Za-z一-龥·・\\-() ]+$'
     )
 );
 
@@ -87,15 +87,17 @@ CREATE TABLE `Announcement` (
     UNIQUE (`PostId`),
     FOREIGN KEY (`Author`) REFERENCES `Admin` (`AdminId`),
     CHECK (
-        `Content` REGEXP '^[A-Za-z0-9\u4e00-\u9fa5!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～ ]*$'
+        `Content` REGEXP '^[A-Za-z0-9一-龥!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～\\n ]*$'
     ),
     CHECK (`Permission` REGEXP 'private|public')
 );
 
 CREATE TABLE `Comment` (
     `Stars` INT(1) PRIMARY KEY,
-    `UserName` VARCHAR(20) NOT NULL,
+    `UserId` VARCHAR(20) NOT NULL,
+    `BookISBN` VARCHAR(13) NOT NULL,
     `RateDate` DATE NOT NULL,
-    FOREIGN KEY (`UserName`) REFERENCES `User` (`UserId`),
+    FOREIGN KEY (`UserId`) REFERENCES `User` (`UserId`),
+    FOREIGN KEY (`BookISBN`) REFERENCES `Book` (`ISBN`),
     CHECK (CAST(`Stars` AS CHAR) REGEXP '[1-5]')
 );
