@@ -4,6 +4,10 @@
 
 G02 校園數位書城
 
+請使用以下媒體閱讀本專題的文書報告：
+
+- [Markdown 報告](src/Campus-Digital-Bookstore.md)
+
 ## 成員
 
 - 41143263 黃柏菻 [@LTurret](https://github.com/LTurret)
@@ -26,12 +30,6 @@ G02 校園數位書城
 <a href="https://github.com/Daniel-TW-0">
 <img src="./docs/members/components/Daniel_TW_0.svg" width="500" height="120" style="margin-top: 0.5rem;">
 </a>
-
-## 報告
-
-請使用以下媒體閱讀本專題的文書報告：
-
-- [Markdown 報告](src/Campus-Digital-Bookstore.md)
 
 ## 進度
 

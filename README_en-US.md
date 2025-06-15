@@ -4,6 +4,10 @@
 
 G02 Campus Digital Books
 
+Please use the following media to read the written report for this project:
+
+- [Markdown Report](src/Campus-Digital-Bookstore.md)
+
 ## Members
 
 - 41143263 黃柏菻 [@LTurret](https://github.com/LTurret)
@@ -26,12 +30,6 @@ G02 Campus Digital Books
 <a href="https://github.com/Daniel-TW-0">
 <img src="./docs/members/components/Daniel_TW_0.svg" width="500" height="120" style="margin-top: 0.5rem;">
 </a>
-
-## Report
-
-Please use the following media to read the written report for this project:
-
-- [Markdown Report](src/Campus-Digital-Bookstore.md)
 
 ## Works
 
