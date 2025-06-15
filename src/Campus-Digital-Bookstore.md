@@ -23,6 +23,7 @@
     - [**Book**](#book)
     - [**AccessCopy**](#accesscopy)
     - [**Announcement**](#announcement)
+    - [**Comment**](#comment)
     - [**Recipt**](#recipt)
   - [外部檢視](#外部檢視)
     - [1. 建立一般使用者與管理員帳號](#1-建立一般使用者與管理員帳號)
@@ -325,11 +326,11 @@ Query OK, 0 rows affected (0.217 sec)
 
 ### **Admin**
 
-| 欄位名稱     | 欄位說明  | 資料型態      | 值域                                                                                                 | 是否為空 |
-|-- |-- | |-- |- |
-| AdminId  | 管理員ID | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否    |
-| NickName | 暱稱 | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                      | 否    |
-| Email    | 電子郵件  | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（例：`admin@mail.com`）                          | 否    |
+| 欄位名稱 | 欄位說明 | 資料型態  | 值域                                                                                                                                                    | 是否為空 |
+|----------|----------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| AdminId  | 管理員ID | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否       |
+| NickName | 暱稱     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                          | 否       |
+| Email    | 電子郵件 | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（例：`admin@mail.com`）                                                  | 否       |
 
 SQL執行結果：
 
@@ -432,6 +433,27 @@ MariaDB [library]> CREATE TABLE `Announcement` (
 Query OK, 0 rows affected (0.132 sec)
 ```
 
+### **Comment**
+
+| 欄位名稱 | 欄位說明 | 資料型態  | 值域                                   | 是否為空 |
+|----------|----------|-----------|----------------------------------------|----------|
+| Stars    | 評分星數 | `INT`     | 僅限 1\~5 的整數，每筆評分唯一（主鍵） | 否       |
+| UserId   | 評分者ID | `VARCHAR` | 參見 User 資料表 UserId 的完整性限制   | 否       |
+| BookISBN | 書籍ISBN | `VARCHAR` | 參見 Book 資料表 ISBN 的完整性限制     | 否       |
+| RateDate | 評分日期 | `DATE`    | 依照日期格式 yyyy-mm-dd                | 否       |
+| RateDate | 評分日期   | `DATE`    | 依照日期格式 yyyy-mm-dd         | 否    |
+
+```sql
+MariaDB [library]> CREATE TABLE `Comment` (
+    -> `Stars` INT(1) PRIMARY KEY,
+    -> `UserName` VARCHAR(20) NOT NULL,
+    -> `RateDate` DATE NOT NULL,
+    -> FOREIGN KEY (`UserName`) REFERENCES `User`(`UserId`),
+    -> CHECK (CAST(`Stars` AS CHAR) REGEXP '[1-5]')
+    -> );
+Query OK, 0 rows affected (0.157 sec)
+```
+
 ### **Recipt**
 
 | 欄位名稱      | 欄位說明  | 資料型態      | 值域                        | 是否為空 |
@@ -444,14 +466,16 @@ Query OK, 0 rows affected (0.132 sec)
 SQL執行結果：
 
 ```sql
-MariaDB [library]> CREATE TABLE `Comment` (
-    -> `Stars` INT(1) PRIMARY KEY,
-    -> `UserName` VARCHAR(20) NOT NULL,
-    -> `RateDate` DATE NOT NULL,
-    -> FOREIGN KEY (`UserName`) REFERENCES `User`(`UserId`),
-    -> CHECK (CAST(`Stars` AS CHAR) REGEXP '[1-5]')
+MariaDB [library]> CREATE TABLE `Recipt` (
+    -> `ReciptId` INT(10) UNSIGNED PRIMARY KEY,
+    -> `BookTitle` VARCHAR(255) NOT NULL,
+    -> `EstDate` DATE NOT NULL,
+    -> `UserId` INT(11) UNSIGNED NOT NULL,
+    -> UNIQUE(`ReciptId`),
+    -> FOREIGN KEY (`UserId`) REFERENCES `User`(`UserId`),
+    -> FOREIGN KEY (`BookTitle`) REFERENCES `Book`(`Title`)
     -> );
-Query OK, 0 rows affected (0.157 sec)
+Query OK, 0 rows affected (0.143 sec)
 ```
 
 ## 外部檢視
