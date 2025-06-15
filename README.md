@@ -6,12 +6,26 @@ G02 校園數位書城
 
 ## 成員
 
-[成員介紹](./docs/members/README.md)  
-
 - 41143263 黃柏菻 [@LTurret](https://github.com/LTurret)
 - 41143264 楊育哲 [@kiol1812](https://github.com/kiol1812)
 - 41136102 王又鋐 [@Wang-You-Hong](https://github.com/Wang-You-Hong)
 - 41143226 洪家鈞 [@Daniel-TW-0](https://github.com/Daniel-TW-0)
+
+<a href="https://github.com/LTurret">
+<img src="./docs/members/components/LT.svg" width="500" height="200" style="margin-top: 0.5rem;">
+</a>
+
+<a href="https://github.com/kiol1812">
+<img src="./docs/members/components/kiol.svg" width="500" height="200" style="margin-top: 0.5rem;">
+</a>
+
+<a href="https://github.com/Wang-You-Hong">
+<img src="./docs/members/components/Wang_You_Hong.svg" width="500" height="220" style="margin-top: 0.5rem;">
+</a>
+
+<a href="https://github.com/Daniel-TW-0">
+<img src="./docs/members/components/Daniel_TW_0.svg" width="500" height="120" style="margin-top: 0.5rem;">
+</a>
 
 ## 報告
 
