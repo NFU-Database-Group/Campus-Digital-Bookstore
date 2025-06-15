@@ -80,6 +80,23 @@ FROM
     LEFT JOIN Announcement ann ON TRUE;
 
 -- ===========================================
+-- 書籍借閱狀態 view
+-- ===========================================
+CREATE OR REPLACE VIEW view_book_borrow_status AS
+SELECT
+    ISBN,
+    Title,
+    Publisher,
+    ReleaseDate,
+    Amount,
+    CASE
+        WHEN Amount > 0 THEN '可借閱'
+        ELSE '不可借閱'
+    END AS BorrowStatus
+FROM
+    Book;
+
+-- ===========================================
 -- 常用分組（GROUP BY）及 HAVING 查詢 view
 -- ===========================================
 -- 每個學生借書數量
@@ -149,7 +166,7 @@ HAVING
     COUNT(c.Stars) > 0;
 
 -- ===========================================
--- 權限設定（學生、管理員只可查各自的 view）
+-- 權限設定
 -- ===========================================
 GRANT
 SELECT
@@ -158,6 +175,11 @@ SELECT
 GRANT
 SELECT
     ON library.view_admin_dashboard TO 'admin_user' @'localhost';
+
+GRANT
+SELECT
+    ON library.view_book_borrow_status TO 'student_user' @'localhost',
+    'admin_user' @'localhost';
 
 GRANT
 SELECT

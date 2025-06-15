@@ -30,6 +30,7 @@
     - [2. 建立 External View](#2-建立-external-view)
       - [學生 view（僅能看到公開公告）](#學生-view僅能看到公開公告)
       - [管理員 view（可看到所有公告，包含 private）](#管理員-view可看到所有公告包含-private)
+      - [查詢書籍清單，並依照館藏數量 Amount 顯示可借閱狀態](#查詢書籍清單並依照館藏數量-amount-顯示可借閱狀態)
       - [權限設定](#權限設定)
     - [3. GROUP BY 與 HAVING 查詢功能](#3-group-by-與-having-查詢功能)
       - [3.1 查詢每個學生的借書數量（含姓名）](#31-查詢每個學生的借書數量含姓名)
@@ -566,11 +567,30 @@ LEFT JOIN Announcement ann ON TRUE;
 
 - 管理員 view 不限定公告權限，可看全部公告。
 
+#### 查詢書籍清單，並依照館藏數量 Amount 顯示可借閱狀態
+
+```SQL
+SELECT
+    ISBN,
+    Title,
+    Publisher,
+    ReleaseDate,
+    Amount,
+    CASE
+        WHEN Amount > 0 THEN '可借閱'
+        ELSE '不可借閱'
+    END AS BorrowStatus
+FROM Book
+ORDER BY Title;
+
+```
+
 #### 權限設定
 
 ```sql
 GRANT SELECT ON library.view_student_dashboard TO 'student_user'@'localhost';
 GRANT SELECT ON library.view_admin_dashboard TO 'admin_user'@'localhost';
+GRANT SELECT ON library.view_book_borrow_status TO 'student_user'@'localhost', 'admin_user'@'localhost';
 ```
 
 （如有需要遠端主機，請將 `'localhost'` 改為 `'%'`）
