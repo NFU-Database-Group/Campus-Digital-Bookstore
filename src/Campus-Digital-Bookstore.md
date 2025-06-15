@@ -14,6 +14,9 @@
     - [功能需求](#功能需求)
     - [功能性需求](#功能性需求)
     - [非功能性需求](#非功能性需求)
+  - [ERD及詳細說明](#erd及詳細說明)
+    - [實體（Entities）](#實體entities)
+    - [關聯（Relationsqlips）](#關聯relationsqlips)
   - [完整性限制](#完整性限制)
     - [**User**](#user)
     - [**Admin**](#admin)
@@ -21,9 +24,18 @@
     - [**AccessCopy**](#accesscopy)
     - [**Announcement**](#announcement)
     - [**Recipt**](#recipt)
-  - [ERD及詳細說明](#erd及詳細說明)
-    - [實體（Entities）](#實體entities)
-    - [關聯（Relationsqlips）](#關聯relationsqlips)
+  - [外部檢視](#外部檢視)
+    - [1. 建立一般使用者與管理員帳號](#1-建立一般使用者與管理員帳號)
+    - [2. 建立 External View](#2-建立-external-view)
+      - [學生 view（僅能看到公開公告）](#學生-view僅能看到公開公告)
+      - [管理員 view（可看到所有公告，包含 private）](#管理員-view可看到所有公告包含-private)
+      - [權限設定](#權限設定)
+    - [3. GROUP BY 與 HAVING 查詢功能](#3-group-by-與-having-查詢功能)
+      - [3.1 查詢每個學生的借書數量（含姓名）](#31-查詢每個學生的借書數量含姓名)
+      - [3.2 查詢有超過2筆借書記錄的學生](#32-查詢有超過2筆借書記錄的學生)
+      - [3.3 查詢每本書被借閱的次數](#33-查詢每本書被借閱的次數)
+      - [3.4 查詢每位管理員管理的書籍數量](#34-查詢每位管理員管理的書籍數量)
+      - [3.5 查詢每本書的平均評分（只算有評分的）](#35-查詢每本書的平均評分只算有評分的)
 
 ## 應用情境
 
@@ -138,174 +150,6 @@
 - 前端圖形化介面
   - 前端響應式設計
   - 黑白主題選項
-
-## 完整性限制
-
-### **User**
-
-| 欄位名稱 | 欄位說明 | 資料型態  | 值域                                                                                                                                                                    | 是否為空 |
-|----------|----------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| UserId   | 學生ID   | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否       |
-| Name     | 姓名     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                                          | 否       |
-| NickName | 暱稱     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                                          | 否       |
-| Status   | 帳號狀態 | `ENUM`    | 只能為 pause（存取限制）、normal（正常使用）、pending（等待驗證）三種狀態                                                                                               | 否       |
-| Email    | 電子郵件 | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（ex: `example@mail.com`）                                                                | 否       |
-
-> [!NOTE]
-> UserId 解釋：
->
-> - 文字表示：`(1 or 3 or 4)aabb(1 or 2 or 3)cc`  
-> - regex 表達式：`(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])`
-> 以 41047320 解釋就是：4 四技、110 年入學、47 生物科技系、3 優班、20 號
-
-SQL執行結果：
-
-```sql
-MariaDB [library]> CREATE TABLE `User` (
-    -> `UserId` VARCHAR(8) PRIMARY KEY,
-    -> `Email` VARCHAR(255) NOT NULL,
-    -> `Name` VARCHAR(20) NOT NULL,
-    -> `NickName` VARCHAR(25) NOT NULL,
-    -> `Status` ENUM('pause', 'normal', 'pending') NOT NULL,
-    CHECK (`UserId` REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])([0-9][0-9])(1|2|3)([0-9][1-9]|[1-9][0-9])$'),
-    -> CHECK (`Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
-    -> CHECK (`Name` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-()]{1,20}$'),
-    -> CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$'),
-    -> CHECK (`Status` REGEXP 'pause|normal|pending')
-    -> );
-Query OK, 0 rows affected (0.217 sec)
-```
-
-### **Admin**
-
-| 欄位名稱     | 欄位說明  | 資料型態      | 值域                                                                                                 | 是否為空 |
-| -------- | ----- | --------- | -------------------------------------------------------------------------------------------------- | ---- |
-| AdminId  | 管理員ID | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否    |
-| NickName | 暱稱 | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                      | 否    |
-| Email    | 電子郵件  | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（例：`admin@mail.com`）                          | 否    |
-
-SQL執行結果：
-
-```sql
-MariaDB [library]> CREATE TABLE `Admin` (
-    -> `AdminId` VARCHAR(8) PRIMARY KEY,
-    -> `Email` VARCHAR(255) NOT NULL,
-    -> `NickName` VARCHAR(25) NOT NULL,
-    -> CHECK (CAST(`AdminId` AS CHAR) REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])$'),
-    -> CHECK (`Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
-    -> CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$')
-    -> );
-Query OK, 0 rows affected (0.132 sec)
-```
-
-### **Book**
-
-  | 欄位名稱    | 欄位說明     | 資料型態  | 值域                                                                                                                                                                                                                                                                                                                           | 是否為空 |
-  |-------------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-  | ISBN        | 國際標準書號 | `VARCHAR` | 長度為13碼，例如：9789861755267、1 到 3 碼：圖書商品識別碼，固定為 978、4 到 6 碼：國家地區識別碼，臺灣分配到 957 和 986 兩個號碼、第 7 碼開始 2 到 5 碼不等：國家圖書館國際標準書號中心分配給書籍的編號、接續 2 到 5 碼不等：出版品識別號，用以區別同一出版社的不同書目或版本、最後 1 碼：檢查碼，依照 ISBN-13 校驗演算法得出 | 否       |
-  | Hasql        | 雜湊值       | `VARCHAR` | 十六進制字元，英文使用小寫或大寫都可以                                                                                                                                                                                                                                                                                         | 否       |
-  | Amount      | 正本數量     | `INT`     | 僅限正整數 0 ~ $10^{11}-1$                                                                                                                                                                                                                                                                                                     | 否       |
-  | Publisqler   | 出版社       | `VARCHAR` | 非空字串，允許255個中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`                                                                                                                                                                                                                                                 | 否       |
-  | ReleaseDate | 出版日期     | `DATE`    | 依照日期格式 yyyy-mm-dd 填入數字                                                                                                                                                                                                                                                                                               | 否       |
-  | Title       | 書名         | `VARCHAR` | 非空字串，允許255個中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`                                                                                                                                                                                                                                                 | 否       |
-  | Maintainer  | 維護者       | `AdminId` | 管理員的ID，參照 `AdminId` 的完整性限制                                                                                                                                                                                                                                                                                        | 否       |
-
-SQL執行結果：
-
-```sql
-MariaDB [library]> CREATE TABLE `Book` (
-    -> `ISBN` VARCHAR(13) PRIMARY KEY,
-    -> `Title` VARCHAR(255) NOT NULL,
-    -> `Publisqler` VARCHAR(255) NOT NULL,
-    -> `ReleaseDate` DATE NOT NULL,
-    -> `Amount` INT(11) UNSIGNED NOT NULL,
-    -> `Maintainer` INT(8) UNSIGNED,
-    -> `Hasql` VARCHAR(16) NOT NULL,
-    -> UNIQUE (`Hasql`),
-    -> UNIQUE (`ISBN`),
-    -> FOREIGN KEY (`Maintainer`) REFERENCES `Admin`(`AdminId`),
-    -> CHECK (`Hasql` REGEXP '^[A-Fa-f0-9]{16}$'),
-    -> CHECK (CAST(`ISBN` AS CHAR) REGEXP '^(978)(957|986|[0-9]{3})([0-9]{2,5})([0-9]{2,5})[0-9]$'),
-    -> CHECK (`Publisqler` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-() ]+$')
-    -> );
-Query OK, 0 rows affected (0.140 sec)
-```
-
-### **AccessCopy**
-
-| 欄位名稱   | 欄位說明     | 資料型態  | 值域                           | 是否為空 |
-|------------|--------------|-----------|--------------------------------|----------|
-| CopyId     | 副本ID       | `INT`     | 僅限正整數                     | 否       |
-| ISBN       | 國際標準書號 | `VARCHAR` | 參見 Book 的 ISBN 完整性限制   | 否       |
-| Owner      | 擁有者       | `VARCHAR` | 參見 User 的 UserId 完整性限制 | 否       |
-| OpenDate   | 上架日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
-| RentDate   | 借閱日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
-| ExpireDate | 逾期日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
-
-SQL執行結果：
-
-```sql
-MariaDB [library]> CREATE TABLE `AccessCopy` (
-    ->     `CopyId` INT(13) UNSIGNED PRIMARY KEY,
-    ->     `Title` VARCHAR(255) NOT NULL,
-    ->     `Owner` VARCHAR(8) NOT NULL,
-    ->     `OpenDate` DATE NOT NULL,
-    ->     `RentDate` DATE NOT NULL,
-    ->     `ExpireDate` DATE NOT NULL,
-    ->     FOREIGN KEY (`Owner`) REFERENCES `User`(`UserId`),
-    ->     FOREIGN KEY (`Title`) REFERENCES `Book`(`Title`)
-    -> );
-Query OK, 0 rows affected (0.146 sec)
-```
-
-### **Announcement**
-
-| 欄位名稱         | 欄位說明 | 資料型態      | 值域                                                                       | 是否為空 |
-| ------------ | ---- | --------- | ------------------------------------------------------------------------ | ---- |
-| PostId       | 公告ID | `INT`     | 僅限正整數且唯一                                                                 | 否    |
-| Author       | 作者   | `VARCHAR` | 參見 Admin 資料表 AdminId 的完整性限制                                              | 否    |
-| Permission   | 權限   | `ENUM`    | 只能為 private 或 public                                          | 否    |
-| AnnounceDate | 公告日期 | `DATE`    | 依照日期格式 yyyy-mm-dd                                                        | 否    |
-| Content      | 公告內容 | `VARCHAR` | 可包含中英文、數字與部分標點符號（允許的符號：`A-Za-z0-9一-龥!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～\n 空白`） | 否    |
-
-SQL執行結果：
-
-```sql
-MariaDB [library]> CREATE TABLE `Announcement` (
-    -> `PostId` INT(10) UNSIGNED PRIMARY KEY,
-    -> `Author` VARCHAR(8) UNSIGNED NOT NULL,
-    -> `Permission` ENUM('private', 'public') NOT NULL,
-    -> `AnnounceDate` DATE NOT NULL,
-    -> `Content` VARCHAR(1000),
-    -> UNIQUE (`PostId`),
-    -> FOREIGN KEY (`Author`) REFERENCES `Admin`(`AdminId`),
-    -> CHECK (`Content` REGEXP '^[A-Za-z0-9\u4e00-\u9fa5!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～ ]*$'),
-    -> CHECK (`Permission` REGEXP 'private|public')
-    -> );
-Query OK, 0 rows affected (0.132 sec)
-```
-
-### **Recipt**
-
-| 欄位名稱      | 欄位說明  | 資料型態      | 值域                        | 是否為空 |
-| --------- | ----- | --------- | ------------------------- | ---- |
-| ReciptId  | 收據ID  | `INT`     | 僅限正整數，且唯一                 | 否    |
-| BookTitle | 書名    | `VARCHAR` | 參見 Book 資料表 Title 的完整性限制  | 否    |
-| EstDate   | 建立日期  | `DATE`    | 依照日期格式 yyyy-mm-dd         | 否    |
-| UserId    | 借閱者ID | `VARCHAR` | 參見 User 資料表 UserId 的完整性限制 | 否    |
-
-SQL執行結果：
-
-```sql
-MariaDB [library]> CREATE TABLE `Comment` (
-    -> `Stars` INT(1) PRIMARY KEY,
-    -> `UserName` VARCHAR(20) NOT NULL,
-    -> `RateDate` DATE NOT NULL,
-    -> FOREIGN KEY (`UserName`) REFERENCES `User`(`UserId`),
-    -> CHECK (CAST(`Stars` AS CHAR) REGEXP '[1-5]')
-    -> );
-Query OK, 0 rows affected (0.157 sec)
-```
 
 ## ERD及詳細說明
 
@@ -441,3 +285,322 @@ Query OK, 0 rows affected (0.157 sec)
 - **Announcement、Comment、Recipt** 為新加入的實體，分別記錄公告、評分、借書收據。
 - **關聯命名與基數** 依照圖上標註進行修正，反映一對多、多對一或多對多關係。
 - 關聯如有複合主鍵、聯合屬性則已簡化合併為單一實體的主鍵設計。
+
+## 完整性限制
+
+### **User**
+
+| 欄位名稱 | 欄位說明 | 資料型態  | 值域                                                                                                                                                                    | 是否為空 |
+------|
+| UserId   | 學生ID   | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否       |
+| Name     | 姓名     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                                          | 否       |
+| NickName | 暱稱     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                                          | 否       |
+| Status   | 帳號狀態 | `ENUM`    | 只能為 pause（存取限制）、normal（正常使用）、pending（等待驗證）三種狀態                                                                                               | 否       |
+| Email    | 電子郵件 | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（ex: `example@mail.com`）                                                                | 否       |
+
+> [!NOTE]
+> UserId 解釋：
+>
+> - 文字表示：`(1 or 3 or 4)aabb(1 or 2 or 3)cc`  
+> - regex 表達式：`(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])`
+> 以 41047320 解釋就是：4 四技、110 年入學、47 生物科技系、3 優班、20 號
+
+SQL執行結果：
+
+```sql
+MariaDB [library]> CREATE TABLE `User` (
+    -> `UserId` VARCHAR(8) PRIMARY KEY,
+    -> `Email` VARCHAR(255) NOT NULL,
+    -> `Name` VARCHAR(20) NOT NULL,
+    -> `NickName` VARCHAR(25) NOT NULL,
+    -> `Status` ENUM('pause', 'normal', 'pending') NOT NULL,
+    CHECK (`UserId` REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])([0-9][0-9])(1|2|3)([0-9][1-9]|[1-9][0-9])$'),
+    -> CHECK (`Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    -> CHECK (`Name` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-()]{1,20}$'),
+    -> CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$'),
+    -> CHECK (`Status` REGEXP 'pause|normal|pending')
+    -> );
+Query OK, 0 rows affected (0.217 sec)
+```
+
+### **Admin**
+
+| 欄位名稱     | 欄位說明  | 資料型態      | 值域                                                                                                 | 是否為空 |
+|-- |-- | |-- |- |
+| AdminId  | 管理員ID | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否    |
+| NickName | 暱稱 | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                      | 否    |
+| Email    | 電子郵件  | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（例：`admin@mail.com`）                          | 否    |
+
+SQL執行結果：
+
+```sql
+MariaDB [library]> CREATE TABLE `Admin` (
+    -> `AdminId` VARCHAR(8) PRIMARY KEY,
+    -> `Email` VARCHAR(255) NOT NULL,
+    -> `NickName` VARCHAR(25) NOT NULL,
+    -> CHECK (CAST(`AdminId` AS CHAR) REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])$'),
+    -> CHECK (`Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    -> CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$')
+    -> );
+Query OK, 0 rows affected (0.132 sec)
+```
+
+### **Book**
+
+  | 欄位名稱    | 欄位說明     | 資料型態  | 值域                                                                                                                                                                                                                                                                                                                           | 是否為空 |
+  --------|
+  | ISBN        | 國際標準書號 | `VARCHAR` | 長度為13碼，例如：9789861755267、1 到 3 碼：圖書商品識別碼，固定為 978、4 到 6 碼：國家地區識別碼，臺灣分配到 957 和 986 兩個號碼、第 7 碼開始 2 到 5 碼不等：國家圖書館國際標準書號中心分配給書籍的編號、接續 2 到 5 碼不等：出版品識別號，用以區別同一出版社的不同書目或版本、最後 1 碼：檢查碼，依照 ISBN-13 校驗演算法得出 | 否       |
+  | Hasql        | 雜湊值       | `VARCHAR` | 十六進制字元，英文使用小寫或大寫都可以                                                                                                                                                                                                                                                                                         | 否       |
+  | Amount      | 正本數量     | `INT`     | 僅限正整數 0 ~ $10^{11}-1$                                                                                                                                                                                                                                                                                                     | 否       |
+  | Publisqler   | 出版社       | `VARCHAR` | 非空字串，允許255個中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`                                                                                                                                                                                                                                                 | 否       |
+  | ReleaseDate | 出版日期     | `DATE`    | 依照日期格式 yyyy-mm-dd 填入數字                                                                                                                                                                                                                                                                                               | 否       |
+  | Title       | 書名         | `VARCHAR` | 非空字串，允許255個中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`                                                                                                                                                                                                                                                 | 否       |
+  | Maintainer  | 維護者       | `AdminId` | 管理員的ID，參照 `AdminId` 的完整性限制                                                                                                                                                                                                                                                                                        | 否       |
+
+SQL執行結果：
+
+```sql
+MariaDB [library]> CREATE TABLE `Book` (
+    -> `ISBN` VARCHAR(13) PRIMARY KEY,
+    -> `Title` VARCHAR(255) NOT NULL,
+    -> `Publisqler` VARCHAR(255) NOT NULL,
+    -> `ReleaseDate` DATE NOT NULL,
+    -> `Amount` INT(11) UNSIGNED NOT NULL,
+    -> `Maintainer` INT(8) UNSIGNED,
+    -> `Hasql` VARCHAR(16) NOT NULL,
+    -> UNIQUE (`Hasql`),
+    -> UNIQUE (`ISBN`),
+    -> FOREIGN KEY (`Maintainer`) REFERENCES `Admin`(`AdminId`),
+    -> CHECK (`Hasql` REGEXP '^[A-Fa-f0-9]{16}$'),
+    -> CHECK (CAST(`ISBN` AS CHAR) REGEXP '^(978)(957|986|[0-9]{3})([0-9]{2,5})([0-9]{2,5})[0-9]$'),
+    -> CHECK (`Publisqler` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-() ]+$')
+    -> );
+Query OK, 0 rows affected (0.140 sec)
+```
+
+### **AccessCopy**
+
+| 欄位名稱   | 欄位說明     | 資料型態  | 值域                           | 是否為空 |
+-------|
+| CopyId     | 副本ID       | `INT`     | 僅限正整數                     | 否       |
+| ISBN       | 國際標準書號 | `VARCHAR` | 參見 Book 的 ISBN 完整性限制   | 否       |
+| Owner      | 擁有者       | `VARCHAR` | 參見 User 的 UserId 完整性限制 | 否       |
+| OpenDate   | 上架日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
+| RentDate   | 借閱日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
+| ExpireDate | 逾期日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
+
+SQL執行結果：
+
+```sql
+MariaDB [library]> CREATE TABLE `AccessCopy` (
+    ->     `CopyId` INT(13) UNSIGNED PRIMARY KEY,
+    ->     `Title` VARCHAR(255) NOT NULL,
+    ->     `Owner` VARCHAR(8) NOT NULL,
+    ->     `OpenDate` DATE NOT NULL,
+    ->     `RentDate` DATE NOT NULL,
+    ->     `ExpireDate` DATE NOT NULL,
+    ->     FOREIGN KEY (`Owner`) REFERENCES `User`(`UserId`),
+    ->     FOREIGN KEY (`Title`) REFERENCES `Book`(`Title`)
+    -> );
+Query OK, 0 rows affected (0.146 sec)
+```
+
+### **Announcement**
+
+| 欄位名稱         | 欄位說明 | 資料型態      | 值域                                                                       | 是否為空 |
+| |- | | |- |
+| PostId       | 公告ID | `INT`     | 僅限正整數且唯一                                                                 | 否    |
+| Author       | 作者   | `VARCHAR` | 參見 Admin 資料表 AdminId 的完整性限制                                              | 否    |
+| Permission   | 權限   | `ENUM`    | 只能為 private 或 public                                          | 否    |
+| AnnounceDate | 公告日期 | `DATE`    | 依照日期格式 yyyy-mm-dd                                                        | 否    |
+| Content      | 公告內容 | `VARCHAR` | 可包含中英文、數字與部分標點符號（允許的符號：`A-Za-z0-9一-龥!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～\n 空白`） | 否    |
+
+SQL執行結果：
+
+```sql
+MariaDB [library]> CREATE TABLE `Announcement` (
+    -> `PostId` INT(10) UNSIGNED PRIMARY KEY,
+    -> `Author` VARCHAR(8) UNSIGNED NOT NULL,
+    -> `Permission` ENUM('private', 'public') NOT NULL,
+    -> `AnnounceDate` DATE NOT NULL,
+    -> `Content` VARCHAR(1000),
+    -> UNIQUE (`PostId`),
+    -> FOREIGN KEY (`Author`) REFERENCES `Admin`(`AdminId`),
+    -> CHECK (`Content` REGEXP '^[A-Za-z0-9\u4e00-\u9fa5!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～ ]*$'),
+    -> CHECK (`Permission` REGEXP 'private|public')
+    -> );
+Query OK, 0 rows affected (0.132 sec)
+```
+
+### **Recipt**
+
+| 欄位名稱      | 欄位說明  | 資料型態      | 值域                        | 是否為空 |
+| |-- | |- |- |
+| ReciptId  | 收據ID  | `INT`     | 僅限正整數，且唯一                 | 否    |
+| BookTitle | 書名    | `VARCHAR` | 參見 Book 資料表 Title 的完整性限制  | 否    |
+| EstDate   | 建立日期  | `DATE`    | 依照日期格式 yyyy-mm-dd         | 否    |
+| UserId    | 借閱者ID | `VARCHAR` | 參見 User 資料表 UserId 的完整性限制 | 否    |
+
+SQL執行結果：
+
+```sql
+MariaDB [library]> CREATE TABLE `Comment` (
+    -> `Stars` INT(1) PRIMARY KEY,
+    -> `UserName` VARCHAR(20) NOT NULL,
+    -> `RateDate` DATE NOT NULL,
+    -> FOREIGN KEY (`UserName`) REFERENCES `User`(`UserId`),
+    -> CHECK (CAST(`Stars` AS CHAR) REGEXP '[1-5]')
+    -> );
+Query OK, 0 rows affected (0.157 sec)
+```
+
+## 外部檢視
+
+### 1. 建立一般使用者與管理員帳號
+
+```sql
+-- 建立一般學生帳號（僅限本機登入，實際應依你的環境調整）
+CREATE USER 'student_user'@'localhost' IDENTIFIED BY 'test_student_0000';
+
+-- 建立管理員帳號
+CREATE USER 'admin_user'@'localhost' IDENTIFIED BY 'test_admin_0000';
+```
+
+### 2. 建立 External View
+
+#### 學生 view（僅能看到公開公告）
+
+```sql
+CREATE OR REPLACE VIEW view_student_dashboard AS
+SELECT
+    u.UserId,
+    u.Name AS UserName,
+    u.NickName,
+    u.Email,
+    u.Status,
+    a.CopyId,
+    a.ISBN,
+    b.Title AS BookTitle,
+    b.Publisher,
+    b.ReleaseDate,
+    b.Amount,
+    ac.OpenDate,
+    ac.RentDate,
+    ac.ExpireDate,
+    r.ReciptId,
+    r.EstDate,
+    c.Stars AS CommentStars,
+    c.RateDate,
+    ann.PostId AS AnnouncementId,
+    ann.AnnounceDate,
+    ann.Content AS Announcement,
+    ann.Permission AS AnnPermission
+FROM `User` u
+LEFT JOIN AccessCopy ac ON u.UserId = ac.Owner
+LEFT JOIN Book b ON ac.ISBN = b.ISBN
+LEFT JOIN Recipt r ON u.UserId = r.UserId AND b.Title = r.BookTitle
+LEFT JOIN Comment c ON u.UserId = c.UserId AND ac.ISBN = c.BookISBN
+LEFT JOIN Announcement ann ON ann.Permission = 'public';
+```
+
+- 學生 view 只會看到公開（public）公告。
+- 可直接查詢自己的借閱、評論、收據、公開公告等資料。
+
+#### 管理員 view（可看到所有公告，包含 private）
+
+```sql
+CREATE OR REPLACE VIEW view_admin_dashboard AS
+SELECT
+    u.UserId,
+    u.Name AS UserName,
+    u.NickName,
+    u.Email,
+    u.Status,
+    a.CopyId,
+    a.ISBN,
+    b.Title AS BookTitle,
+    b.Publisher,
+    b.ReleaseDate,
+    b.Amount,
+    ac.OpenDate,
+    ac.RentDate,
+    ac.ExpireDate,
+    r.ReciptId,
+    r.EstDate,
+    c.Stars AS CommentStars,
+    c.RateDate,
+    ann.PostId AS AnnouncementId,
+    ann.AnnounceDate,
+    ann.Content AS Announcement,
+    ann.Permission AS AnnPermission
+FROM `User` u
+LEFT JOIN AccessCopy ac ON u.UserId = ac.Owner
+LEFT JOIN Book b ON ac.ISBN = b.ISBN
+LEFT JOIN Recipt r ON u.UserId = r.UserId AND b.Title = r.BookTitle
+LEFT JOIN Comment c ON u.UserId = c.UserId AND ac.ISBN = c.BookISBN
+LEFT JOIN Announcement ann ON TRUE;
+```
+
+- 管理員 view 不限定公告權限，可看全部公告。
+
+#### 權限設定
+
+```sql
+GRANT SELECT ON library.view_student_dashboard TO 'student_user'@'localhost';
+GRANT SELECT ON library.view_admin_dashboard TO 'admin_user'@'localhost';
+```
+
+（如有需要遠端主機，請將 `'localhost'` 改為 `'%'`）
+
+### 3. GROUP BY 與 HAVING 查詢功能
+
+#### 3.1 查詢每個學生的借書數量（含姓名）
+
+```sql
+SELECT u.UserId, u.Name, COUNT(ac.CopyId) AS BorrowCount
+FROM `User` u
+LEFT JOIN AccessCopy ac ON u.UserId = ac.Owner
+GROUP BY u.UserId, u.Name
+ORDER BY BorrowCount DESC;
+```
+
+#### 3.2 查詢有超過2筆借書記錄的學生
+
+```sql
+SELECT u.UserId, u.Name, COUNT(ac.CopyId) AS BorrowCount
+FROM `User` u
+LEFT JOIN AccessCopy ac ON u.UserId = ac.Owner
+GROUP BY u.UserId, u.Name
+HAVING COUNT(ac.CopyId) > 2
+ORDER BY BorrowCount DESC;
+```
+
+#### 3.3 查詢每本書被借閱的次數
+
+```sql
+SELECT b.Title, COUNT(ac.CopyId) AS BorrowCount
+FROM Book b
+LEFT JOIN AccessCopy ac ON b.ISBN = ac.ISBN
+GROUP BY b.Title
+ORDER BY BorrowCount DESC;
+```
+
+#### 3.4 查詢每位管理員管理的書籍數量
+
+```sql
+SELECT a.AdminId, a.NickName, COUNT(b.ISBN) AS BookCount
+FROM Admin a
+LEFT JOIN Book b ON a.AdminId = b.Maintainer
+GROUP BY a.AdminId, a.NickName;
+```
+
+#### 3.5 查詢每本書的平均評分（只算有評分的）
+
+```sql
+SELECT b.Title, AVG(c.Stars) AS AvgRating, COUNT(c.Stars) AS RatingCount
+FROM Book b
+JOIN Comment c ON b.ISBN = c.BookISBN
+GROUP BY b.Title
+HAVING COUNT(c.Stars) > 0
+ORDER BY AvgRating DESC;
+```
