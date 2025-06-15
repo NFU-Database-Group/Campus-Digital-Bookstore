@@ -18,12 +18,12 @@
     - [**User**](#user)
     - [**Admin**](#admin)
     - [**Book**](#book)
-    - [**Title**](#title)
     - [**AccessCopy**](#accesscopy)
-    - [**Note**](#note)
+    - [**Announcement**](#announcement)
+    - [**Recipt**](#recipt)
   - [ERD及詳細說明](#erd及詳細說明)
-    - [實體](#實體)
-    - [關聯](#關聯)
+    - [實體（Entities）](#實體entities)
+    - [關聯（Relationsqlips）](#關聯relationsqlips)
 
 ## 應用情境
 
@@ -85,7 +85,7 @@
 在此系統中，書城管理員的使用過程包含以下幾個步驟：
 
 1. 登入系統：管理員輸入帳號與密碼完成身份驗證，對應資料庫中「AdminId」欄位。
-2. 書籍管理：管理員可新增、修改或刪除書籍資訊，系統操作對應「Book」表中 BookId、ISBN、Amount、Publisher、ReleaseDate 等欄位，並觸發「更新書籍狀態」子流程。
+2. 書籍管理：管理員可新增、修改或刪除書籍資訊，系統操作對應「Book」表中 BookId、ISBN、Amount、Publisqler、ReleaseDate 等欄位，並觸發「更新書籍狀態」子流程。
 3. 帳號管理：管理員可調整學生借閱額度或重設帳號狀態，系統更新「AccessCopy」及「User」表中的相關欄位，並執行「更新帳號狀態」子流程。
 4. 學生管理：管理員可新增、修改或停用學生帳號，對應「User」表中 UserId、Name、Email 等欄位，並同樣包含「更新帳號狀態」子流程。
 
@@ -122,7 +122,7 @@
    - 在頁面上標註螢光筆筆記
 
 6. **安全性**
-   - 每個電子書正本、副本都會儲存其 SHA256 雜湊值
+   - 每個電子書正本、副本都會儲存其 sqlA256 雜湊值
 
 ### 功能性需求
 
@@ -149,281 +149,301 @@
 
 ### **User**
 
-  | 欄位名稱 | 欄位說明 | 資料型態                   | 值域                         | 是否為空 |
-  |----------|--------|----------------------------|----------------------------|---------|
-  | UserId   | 學生ID | `VARCHAR(8)` (8 bytes)     | 第一碼：只能是 4 或 5、第二、三碼：必須為兩位數字，範圍從 01 到 99、第四碼：固定為 4、第五碼：只能是 0–9（任一數字）、第六碼：只能是 0–3（任一數字）、第七、八碼：必須為兩位數字，範圍從 01 到 99 | 否       |
-  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)   | 無特殊符號之非空字串，允許英文、中文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`         | 否       |
-  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes) | 學校電子郵件格式，學號 + `@nfu.edu.tw`，學號值域參見 `UserId`       | 否       |
+| 欄位名稱 | 欄位說明 | 資料型態  | 值域                                                                                                                                                                    | 是否為空 |
+|----------|----------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| UserId   | 學生ID   | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否       |
+| Name     | 姓名     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                                          | 否       |
+| NickName | 暱稱     | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                                                          | 否       |
+| Status   | 帳號狀態 | `ENUM`    | 只能為 pause（存取限制）、normal（正常使用）、pending（等待驗證）三種狀態                                                                                               | 否       |
+| Email    | 電子郵件 | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（ex: `example@mail.com`）                                                                | 否       |
 
-- 成功輸入範例
+> [!NOTE]
+> UserId 解釋：
+>
+> - 文字表示：`(1 or 3 or 4)aabb(1 or 2 or 3)cc`  
+> - regex 表達式：`(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])`
+> 以 41047320 解釋就是：4 四技、110 年入學、47 生物科技系、3 優班、20 號
 
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143281, '陳小明', '41143281@nfu.edu.tw');
-  Query OK, 1 row affected (0.006 sec)
+SQL執行結果：
 
-  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143282, 'Smith', '41143282@nfu.edu.tw');
-  Query OK, 1 row affected (0.009 sec)
-
-  MariaDB [cdb_db]> SELECT * FROM users;
-  +----------+-----------+---------------------+
-  | UserId   | Name      | Email               |
-  +----------+-----------+---------------------+
-  | 41143281 | 陳小明    | 41143281@nfu.edu.tw |
-  | 41143282 | Smith     | 41143282@nfu.edu.tw |
-  +----------+-----------+---------------------+
-  2 rows in set (0.007 sec)
-  ```
-
-- 錯誤輸入範例
-
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (12345678, 'Smith', '41143283@nfu.edu.tw');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`users`
-  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143283, 'Smith@123', '41143283@nfu.edu.tw');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_2` failed for `cdb_db`.`users`
-  MariaDB [cdb_db]> INSERT INTO users (UserId, Name, Email) VALUES (41143283, 'Smith', '41143283@npu.edu.tw');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`users`
-  ```
+```sql
+MariaDB [library]> CREATE TABLE `User` (
+    -> `UserId` VARCHAR(8) PRIMARY KEY,
+    -> `Email` VARCHAR(255) NOT NULL,
+    -> `Name` VARCHAR(20) NOT NULL,
+    -> `NickName` VARCHAR(25) NOT NULL,
+    -> `Status` ENUM('pause', 'normal', 'pending') NOT NULL,
+    CHECK (`UserId` REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])([0-9][0-9])(1|2|3)([0-9][1-9]|[1-9][0-9])$'),
+    -> CHECK (`Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    -> CHECK (`Name` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-()]{1,20}$'),
+    -> CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$'),
+    -> CHECK (`Status` REGEXP 'pause|normal|pending')
+    -> );
+Query OK, 0 rows affected (0.217 sec)
+```
 
 ### **Admin**
 
-  | 欄位名稱 | 欄位說明 | 資料型態                     | 值域                   | 是否為空 |
-  |----------|--------|------------------------------|----------------------|---------|
-  | AdminId  | 管理員ID | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數             | 否       |
-  | Name     | 姓名     | `VARCHAR(20)` (20 bytes)     | 無特殊符號之非空字串，允許英文、中文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`   | 否       |
-  | Email    | 電子郵件 | `VARCHAR(255)` (255 bytes)   | 學校電子郵件格式，學號 + `@nfu.edu.tw`，學號值域參見 `UserId` | 否       |
+| 欄位名稱     | 欄位說明  | 資料型態      | 值域                                                                                                 | 是否為空 |
+| -------- | ----- | --------- | -------------------------------------------------------------------------------------------------- | ---- |
+| AdminId  | 管理員ID | `VARCHAR` | 第一碼：1 碩士班、3 二技、4 、號第二、三碼：入學、號第四、五碼：系所、號第六碼：1 甲班、2 乙班、3 優班（產學班、跨域專、號第七、八碼：座位號碼（共8碼） | 否    |
+| NickName | 暱稱 | `VARCHAR` | 無特殊符號之非空字串，允許英文、中文與以下特殊字元：`·`、`・`、`-`、`（`、`）`                                                      | 否    |
+| Email    | 電子郵件  | `VARCHAR` | 英文、數字、部分特殊符號（. \_ % + -）+ `@` + 網站名稱 + `.` + 網域/最高級網域（例：`admin@mail.com`）                          | 否    |
 
-- 成功輸入範例
+SQL執行結果：
 
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO admin (Name, Email) VALUES ('陳曉明', '41143281@nfu.edu.tw');
-  MariaDB [cdb_db]> SELECT * FROM admin;
-  +---------+-----------+---------------------+
-  | AdminId | Name      | Email               |
-  +---------+-----------+---------------------+
-  |       1 | 陳曉明    | 41143281@nfu.edu.tw |
-  +---------+-----------+---------------------+
-  1 row in set (0.004 sec)
-  ```
-
-- 錯誤輸入範例
-
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO admin (Name, Email) VALUES ('陳曉明@123', '41143281@nfu.edu.tw');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`admin`
-  MariaDB [cdb_db]> INSERT INTO admin (Name, Email) VALUES ('陳曉明', '41143281@npu.edu.tw');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_2` failed for `cdb_db`.`admin`
-  ```
+```sql
+MariaDB [library]> CREATE TABLE `Admin` (
+    -> `AdminId` VARCHAR(8) PRIMARY KEY,
+    -> `Email` VARCHAR(255) NOT NULL,
+    -> `NickName` VARCHAR(25) NOT NULL,
+    -> CHECK (CAST(`AdminId` AS CHAR) REGEXP '^(1|3|4)([0-9][1-9]|[1-9][0-9])(\d{2})(1|2|3)([0-9][1-9]|[1-9][0-9])$'),
+    -> CHECK (`Email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    -> CHECK (`NickName` REGEXP '^[A-Za-z0-9]{5,25}$')
+    -> );
+Query OK, 0 rows affected (0.132 sec)
+```
 
 ### **Book**
 
-  | 欄位名稱    | 欄位說明 | 資料型態                     | 值域                  | 是否為空 |
-  |-------------|--------|------------------------------|-----------------------|---------|
-  | BookId      | 書籍ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$            | 否       |
-  | Category        | 書籍類型 | `VARCHAR(255)`   (255 bytes) | 非空字串，允許中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`          | 否       |
-  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫或大寫都可以 | 否       |
-  | ISBN        | 書籍ISBN | `VARCHAR(13)`     (13 bytes) | 符合 ISBN-13 或 ISBN-10格式，ISBN-13 需以978或979開頭，接著十位數字；ISBN-10 則是九位數字接著一位數字或字母X或x | 否       |
-  | Amount      | 正本數量 | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$            | 否       |
-  | Publisher   | 出版社   | `VARCHAR(255)`   (255 bytes) | 非空字串，允許中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`          | 否       |
-  | ReleaseDate | 出版日期 | `DATE`            (3 bytes)  | 依照日期格式 yyyy-mm-dd 填入數字           | 否       |
+  | 欄位名稱    | 欄位說明     | 資料型態  | 值域                                                                                                                                                                                                                                                                                                                           | 是否為空 |
+  |-------------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+  | ISBN        | 國際標準書號 | `VARCHAR` | 長度為13碼，例如：9789861755267、1 到 3 碼：圖書商品識別碼，固定為 978、4 到 6 碼：國家地區識別碼，臺灣分配到 957 和 986 兩個號碼、第 7 碼開始 2 到 5 碼不等：國家圖書館國際標準書號中心分配給書籍的編號、接續 2 到 5 碼不等：出版品識別號，用以區別同一出版社的不同書目或版本、最後 1 碼：檢查碼，依照 ISBN-13 校驗演算法得出 | 否       |
+  | Hasql        | 雜湊值       | `VARCHAR` | 十六進制字元，英文使用小寫或大寫都可以                                                                                                                                                                                                                                                                                         | 否       |
+  | Amount      | 正本數量     | `INT`     | 僅限正整數 0 ~ $10^{11}-1$                                                                                                                                                                                                                                                                                                     | 否       |
+  | Publisqler   | 出版社       | `VARCHAR` | 非空字串，允許255個中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`                                                                                                                                                                                                                                                 | 否       |
+  | ReleaseDate | 出版日期     | `DATE`    | 依照日期格式 yyyy-mm-dd 填入數字                                                                                                                                                                                                                                                                                               | 否       |
+  | Title       | 書名         | `VARCHAR` | 非空字串，允許255個中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`                                                                                                                                                                                                                                                 | 否       |
+  | Maintainer  | 維護者       | `AdminId` | 管理員的ID，參照 `AdminId` 的完整性限制                                                                                                                                                                                                                                                                                        | 否       |
 
-- 成功輸入範例
+SQL執行結果：
 
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO `book` (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) VALUES
-      -> ('科學', '1234567890abcdef', '9781234567890', 5, '科學出版社', '2023-01-01'),
-      -> ('文學', 'fedcba0987654321', '9791234567890', 3, '文學出版社', '2022-12-31');
-  Query OK, 2 rows affected (0.021 sec)
-  Records: 2  Duplicates: 0  Warnings: 0
-
-  MariaDB [cdb_db]> SELECT * FROM book;
-  +--------+----------+------------------+---------------+--------+-----------------+-------------+
-  | BookId | Category | Hash             | ISBN          | Amount | Publisher       | ReleaseDate |
-  +--------+----------+------------------+---------------+--------+-----------------+-------------+
-  |      1 | 科學     | 1234567890abcdef | 9781234567890 |      5 | 科學出版社      | 2023-01-01  |
-  |      2 | 文學     | fedcba0987654321 | 9791234567890 |      3 | 文學出版社      | 2022-12-31  |
-  +--------+----------+------------------+---------------+--------+-----------------+-------------+
-  2 rows in set (0.008 sec)
-  ```
-
-- 錯誤輸入範例
-
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO book (`Category`, `Hash`, `ISBN`, `Amount`, `Publisher`, `ReleaseDate`) VALUES ('科學', 'abca123764feab22', '1231231231231', 7, '科學出版社', '2022-09-09');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_3` failed for `cdb_db`.`book`
-  ```
-
-### **Title**
-
-  | 欄位名稱 | 欄位說明                               | 資料型態                      | 值域                | 是否為空 |
-  |----------|--------------------------------------|-------------------------------|-------------------|---------|
-  | TitleId  | 標題ID                                 | `INT(11) UNSIGNED` (4 bytes)  | 僅限正整數 0 ~ $10^{11}-1$          | 否       |
-  | BookId   | 參照書籍ID                             | `INT(11) UNSIGNED` (4 bytes)  | 參考 Book 的 BookId | 否       |
-  | Language | ISO 639-1 或 ISO 639-2 格式標記標題語言 | `VARCHAR(3)`        (3 bytes) | 二至三個小寫英文字母，第一個字母可以是大寫   | 否       |
-  | TitleName    | 標題文字                               | `VARCHAR(255)`    (255 bytes) | 非空字串，允許中、英文字元和一些特殊字元，如： `·`、`・`、`-`、`（`、`）`        | 否       |
-
-- 成功輸入範例
-
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO `title` (`BookId`, `Language`, `TitleName`) VALUES
-      -> (1, 'zh', '科學探索'),
-      -> (1, 'en', 'Scientific Exploration'),
-      -> (2, 'zh', '文學之旅'),
-      -> (2, 'en', 'Literary Journey');
-  Query OK, 4 rows affected (0.084 sec)
-  Records: 4  Duplicates: 0  Warnings: 0
-
-  MariaDB [cdb_db]> SELECT * FROM title;
-  +---------+--------+----------+------------------------+
-  | TitleId | BookId | Language | TitleName              |
-  +---------+--------+----------+------------------------+
-  |       1 |      1 | zh       | 科學探索               |
-  |       2 |      1 | en       | Scientific Exploration |
-  |       3 |      2 | zh       | 文學之旅               |
-  |       4 |      2 | en       | Literary Journey       |
-  +---------+--------+----------+------------------------+
-  4 rows in set (0.022 sec)
-  ```
-
-- 錯誤輸入範例
-
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO title (BookId, Language, TitleName) VALUES ('1', 'zh-TW', '科學探索');
-  ERROR 1406 (22001): Data too long for column 'Language' at row 1
-  MariaDB [cdb_db]> INSERT INTO title (BookId, Language, TitleName) VALUES ('1', 'zh@', '科學探索');
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`title`
-  ```
+```sql
+MariaDB [library]> CREATE TABLE `Book` (
+    -> `ISBN` VARCHAR(13) PRIMARY KEY,
+    -> `Title` VARCHAR(255) NOT NULL,
+    -> `Publisqler` VARCHAR(255) NOT NULL,
+    -> `ReleaseDate` DATE NOT NULL,
+    -> `Amount` INT(11) UNSIGNED NOT NULL,
+    -> `Maintainer` INT(8) UNSIGNED,
+    -> `Hasql` VARCHAR(16) NOT NULL,
+    -> UNIQUE (`Hasql`),
+    -> UNIQUE (`ISBN`),
+    -> FOREIGN KEY (`Maintainer`) REFERENCES `Admin`(`AdminId`),
+    -> CHECK (`Hasql` REGEXP '^[A-Fa-f0-9]{16}$'),
+    -> CHECK (CAST(`ISBN` AS CHAR) REGEXP '^(978)(957|986|[0-9]{3})([0-9]{2,5})([0-9]{2,5})[0-9]$'),
+    -> CHECK (`Publisqler` REGEXP '^[A-Za-z\u4e00-\u9fa5·・\\-() ]+$')
+    -> );
+Query OK, 0 rows affected (0.140 sec)
+```
 
 ### **AccessCopy**
 
-  | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
-  |------------|--------|------------------------------|---------------------|---------|
-  | CopyId     | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$          | 否       |
-  | Hash       | 雜湊值   | `VARCHAR(16)`     (16 bytes) | 十六進制字元，英文使用小寫或大寫字母都可以 | 否       |
-  | OpenDate   | 借閱日期 | `DATE`             (3 bytes) | 依照日期格式 yyyy-mm-dd 填入數字           | 否       |
-  | ExpireDate | 逾期日期 | `DATE`             (3 bytes) | 依照日期格式 yyyy-mm-dd 填入數字           | 否       |
-  | UserId      | 擁有者   | `VARCHAR(8)`       (8 bytes) | 參照 User 的 UserId | 否       |
+| 欄位名稱   | 欄位說明     | 資料型態  | 值域                           | 是否為空 |
+|------------|--------------|-----------|--------------------------------|----------|
+| CopyId     | 副本ID       | `INT`     | 僅限正整數                     | 否       |
+| ISBN       | 國際標準書號 | `VARCHAR` | 參見 Book 的 ISBN 完整性限制   | 否       |
+| Owner      | 擁有者       | `VARCHAR` | 參見 User 的 UserId 完整性限制 | 否       |
+| OpenDate   | 上架日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
+| RentDate   | 借閱日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
+| ExpireDate | 逾期日期     | `DATE`    | 依照日期格式 yyyy-mm-dd        | 否       |
 
-- 成功輸入範例
+SQL執行結果：
 
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO `copy` (`OpenDate`, `ExpireDate`, `Owner`, `Title`) VALUES
-      -> ('2025-06-04', '2025-06-18', 41143281, 1),
-      -> ('2025-06-02', '2025-06-16', 41143282, 2);
-  Query OK, 2 rows affected (0.015 sec)
-  Records: 2  Duplicates: 0  Warnings: 0
+```sql
+MariaDB [library]> CREATE TABLE `AccessCopy` (
+    ->     `CopyId` INT(13) UNSIGNED PRIMARY KEY,
+    ->     `Title` VARCHAR(255) NOT NULL,
+    ->     `Owner` VARCHAR(8) NOT NULL,
+    ->     `OpenDate` DATE NOT NULL,
+    ->     `RentDate` DATE NOT NULL,
+    ->     `ExpireDate` DATE NOT NULL,
+    ->     FOREIGN KEY (`Owner`) REFERENCES `User`(`UserId`),
+    ->     FOREIGN KEY (`Title`) REFERENCES `Book`(`Title`)
+    -> );
+Query OK, 0 rows affected (0.146 sec)
+```
 
-  MariaDB [cdb_db]> SELECT * FROM copy;
-  +--------+------------+------------+----------+-------+
-  | CopyId | OpenDate   | ExpireDate | Owner    | Title |
-  +--------+------------+------------+----------+-------+
-  |      1 | 2025-06-04 | 2025-06-18 | 41143281 |     1 |
-  |      2 | 2025-06-02 | 2025-06-16 | 41143282 |     2 |
-  +--------+------------+------------+----------+-------+
-  2 rows in set (0.016 sec)
-  ```
+### **Announcement**
 
-- 錯誤輸入範例
+| 欄位名稱         | 欄位說明 | 資料型態      | 值域                                                                       | 是否為空 |
+| ------------ | ---- | --------- | ------------------------------------------------------------------------ | ---- |
+| PostId       | 公告ID | `INT`     | 僅限正整數且唯一                                                                 | 否    |
+| Author       | 作者   | `VARCHAR` | 參見 Admin 資料表 AdminId 的完整性限制                                              | 否    |
+| Permission   | 權限   | `ENUM`    | 只能為 private 或 public                                          | 否    |
+| AnnounceDate | 公告日期 | `DATE`    | 依照日期格式 yyyy-mm-dd                                                        | 否    |
+| Content      | 公告內容 | `VARCHAR` | 可包含中英文、數字與部分標點符號（允許的符號：`A-Za-z0-9一-龥!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～\n 空白`） | 否    |
 
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO `copy` (`OpenDate`, `ExpireDate`, `Owner`, `Title`) VALUES ('2025-06-04', '2024-06-18', 41143281, 1);
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`copy`
-  ```
+SQL執行結果：
 
-### **Note**
+```sql
+MariaDB [library]> CREATE TABLE `Announcement` (
+    -> `PostId` INT(10) UNSIGNED PRIMARY KEY,
+    -> `Author` VARCHAR(8) UNSIGNED NOT NULL,
+    -> `Permission` ENUM('private', 'public') NOT NULL,
+    -> `AnnounceDate` DATE NOT NULL,
+    -> `Content` VARCHAR(1000),
+    -> UNIQUE (`PostId`),
+    -> FOREIGN KEY (`Author`) REFERENCES `Admin`(`AdminId`),
+    -> CHECK (`Content` REGEXP '^[A-Za-z0-9\u4e00-\u9fa5!,.:;?—…─、。〈〉《》「」『』！（），．：；？＿～ ]*$'),
+    -> CHECK (`Permission` REGEXP 'private|public')
+    -> );
+Query OK, 0 rows affected (0.132 sec)
+```
 
-  | 欄位名稱   | 欄位說明 | 資料型態                     | 值域                | 是否為空 |
-  |------------|--------|------------------------------|---------------------|---------|
-  | NoteId     | 螢光筆記ID   | `INT(11) UNSIGNED` (4 bytes) | 僅限正整數 0 ~ $10^{11}-1$          | 否       |
-  | LineStart | 起始位置 | `DECIMAL(5,2)` (5 bytes) | 不允許負數，範圍從 0 到 300.00 | 否       |
-  | LineEnd   | 結束位置 | `DECIMAL(5,2)` (5 bytes) | 不允許負數，範圍從 0 到 300.00 | 否       |
-  | Copy      | 副本ID   | `INT(11) UNSIGNED` (4 bytes) | 參照 AccessCopy 的 CopyId | 否       |
+### **Recipt**
 
-- 成功輸入範例
+| 欄位名稱      | 欄位說明  | 資料型態      | 值域                        | 是否為空 |
+| --------- | ----- | --------- | ------------------------- | ---- |
+| ReciptId  | 收據ID  | `INT`     | 僅限正整數，且唯一                 | 否    |
+| BookTitle | 書名    | `VARCHAR` | 參見 Book 資料表 Title 的完整性限制  | 否    |
+| EstDate   | 建立日期  | `DATE`    | 依照日期格式 yyyy-mm-dd         | 否    |
+| UserId    | 借閱者ID | `VARCHAR` | 參見 User 資料表 UserId 的完整性限制 | 否    |
 
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO `note` (`LineStart`, `LineEnd`, `Copy`) VALUES
-      -> (1.0, 2.0, 1),
-      -> (3.5, 4.5, 2);
-  Query OK, 2 rows affected (0.022 sec)
-  Records: 2  Duplicates: 0  Warnings: 0
+SQL執行結果：
 
-  MariaDB [cdb_db]> SELECT * FROM note;
-  +--------+-----------+---------+------+
-  | NoteId | LineStart | LineEnd | Copy |
-  +--------+-----------+---------+------+
-  |      1 |      1.00 |    2.00 |    1 |
-  |      2 |      3.50 |    4.50 |    2 |
-  +--------+-----------+---------+------+
-  2 rows in set (0.007 sec)
-  ```
-
-- 錯誤輸入範例
-
-  ```bash
-  MariaDB [cdb_db]> INSERT INTO `note` (`LineStart`, `LineEnd`, `Copy`) VALUES (-1.0, 2.0, 1);
-  ERROR 4025 (23000): CONSTRAINT `CONSTRAINT_1` failed for `cdb_db`.`note`
-  ```
+```sql
+MariaDB [library]> CREATE TABLE `Comment` (
+    -> `Stars` INT(1) PRIMARY KEY,
+    -> `UserName` VARCHAR(20) NOT NULL,
+    -> `RateDate` DATE NOT NULL,
+    -> FOREIGN KEY (`UserName`) REFERENCES `User`(`UserId`),
+    -> CHECK (CAST(`Stars` AS CHAR) REGEXP '[1-5]')
+    -> );
+Query OK, 0 rows affected (0.157 sec)
+```
 
 ## ERD及詳細說明
 
 ![Image](latex/image/ChenERDiagram.png)
 
-### 實體
+### 實體（Entities）
 
 1. **User**
+
    - 屬性
-      - UserId（**主鍵**；學生ID）
-      - Name（姓名）
-      - Email（電子郵件）
+
+     - UserId（**主鍵**，學生ID）
+     - Name（姓名）
+     - Email（電子郵件）
+     - NickName（暱稱）
+     - Status（帳號狀態）
    - 關聯
-     - is_managed_by：學生被零或一位管理員管理
-     - rent：學生借閱零至多份副本（AccessCopy）
-     - read：學生可閱讀零至多份副本（AccessCopy）
+
+     - is\_managed\_by：學生被零或一位管理員管理（0..1）
+     - rent：學生可借閱零至多份副本（AccessCopy）（0..N）
+     - rate：學生可對多本書評分（Comment）（0..N）
+     - receipt：學生會產生多張收據（Recipt）（0..N）
 
 2. **Admin**
+
    - 屬性
-     - AdminId（**主鍵**；管理員ID）
+
+     - AdminId（**主鍵**，管理員ID）
+     - NickName（暱稱）
+     - Email（電子郵件）
    - 關聯
-     - is_managed_by：管理員管理一至多位學生
-     - maintain：管理員管理一至多本書籍
+
+     - is\_managed\_by：管理員可管理多位學生（1..N）
+     - maintain：管理員維護多本書籍（1..N）
+     - announce：管理員可發布多則公告（1..N）
 
 3. **Book**
+
    - 屬性
-     - BookId（**主鍵**；書籍ID）
+
+     - ISBN（**主鍵**，書籍ISBN）
+     - Title（書名）
+     - Publisqler（出版社）
+     - ReleaseDate（出版日期）
+     - Amount（館藏數量）
+     - Hasql（雜湊值）
+     - Maintainer（管理員ID）
+   - 關聯
+
+     - maintain：書籍由管理員維護（0..1）
+     - copy\_of：一本書可被複製成多份副本（AccessCopy）（0..N）
+     - rate：書可被評分（Comment）（0..N）
+
+4. **AccessCopy**
+
+   - 屬性
+
+     - CopyId（**主鍵**，副本ID）
+     - OpenDate（上架日期）
+     - RentDate（借閱日期）
+     - ExpireDate（到期日期）
+     - Owner（學生ID）
      - ISBN（書籍ISBN）
-     - Amount（正本數量）
-     - Publisher（出版社）
-     - Release Date（出版日期）
    - 關聯
-     - maintain：書籍管理零個管理員
-     - copy of：書籍可被複製成一至多份副本（AccessCopy），並具備時間戳記
-     - contain：書籍包含一至多個標題 (Title)
 
-4. **Title**
+     - rent：副本由學生借閱（1）
+     - copy\_of：副本屬於某本書（1）
+
+5. **Recipt**
+
    - 屬性
-     - TitleId (**主鍵**；標題ID)
-     - BookId (**外鍵**；連結到Book資料表)
-     - Language (標題語言)
-     - Title (標題文字)
-   - 關聯
-     - Contain：標題包含一個書籍
 
-5. **AccessCopy**
+     - ReciptId（**主鍵**，收據ID）
+     - BookTitle（書名）
+     - EstDate（建立日期）
+     - UserId（學生ID）
+   - 關聯
+
+     - receipt：收據對應一位學生（1）
+     - receipt：收據對應一本書（1）
+
+6. **Announcement**
+
    - 屬性
-     - CopyId（**主鍵**；副本ID）
-     - OpenDate（借閱日期）
-     - ExpireDate（逾期日期）
-     - UserId（擁有者）
+
+     - PostId（**主鍵**，公告ID）
+     - Content（內容）
+     - Permission（權限）
+     - AnnounceDate（公告日期）
+     - Author（管理員ID）
    - 關聯
-     - read：副本被一位學生閱讀
-     - copy of：副本對應一本原始書籍（Book）
 
-### 關聯
+     - announce：公告由管理員發布（1）
 
-1. 「User」與「Admin」有一對多（1..N）管理關係（is_managed_by），一位學生可以被零或一位管理員管理（0..1），而一位管理員可以管理一至多位學生（1..N）。
-2. 「User」與「AccessCopy」有一對多（0..N）借閱關係（rent），一位學生可以借閱零至多份副本（0..N），而每一份副本只能被一位學生借出（1）。
-3. 「User」與「AccessCopy」有一對多（0..N）閱讀關係（read），一位學生可以閱讀零至多份副本（0..N），而每份副本只能被一位學生閱讀（1）。
-4. 「Admin」與「Book」有一對多（1..N）管理關係（maintain），一位管理員可以管理一至多本書（1..N），而一本書可以沒有管理員維護（0）。
-5. 「AccessCopy」與「Book」有一對多（1..N）來源關係（copy of），一本書可以被複製成零至多份副本（0..N），而每份副本只能對應一本書籍（1），並記錄複製時間戳記。
-6. 「Book」與「Title」有一對多（1..N）個書名（contain），一本書可以有多個不同翻譯的書名（0..N），而每個標題只有對應一本書（1）。
+7. **Comment**
+
+   - 屬性
+
+     - Stars（**主鍵**，評分分數）
+     - UserId（學生ID）
+     - BookISBN（書籍ISBN）
+     - RateDate（評分日期）
+   - 關聯
+
+     - rate：評分由學生發出（1）
+     - rate：評分對應一本書（1）
+
+### 關聯（Relationsqlips）
+
+1. **User — is\_managed\_by — Admin**
+   一位學生最多可被一位管理員管理（0..1），一位管理員可管理多位學生（1..N）。
+
+2. **User — rent — AccessCopy**
+   一位學生可借閱零至多份副本（0..N），每份副本僅屬於一位學生（1）。
+
+3. **Admin — maintain — Book**
+   一位管理員可維護多本書（1..N），一本書必須由一位管理員維護（1）。
+
+4. **Book — copy\_of — AccessCopy**
+   一本書可複製成多份副本（0..N），每份副本僅對應一本書（1）。
+
+5. **User — rate — Comment — Book**
+   一位學生可對多本書評分（0..N），每筆評分連結一位學生與一本書（1）。
+   每本書可收到多筆評分（0..N）。
+
+6. **Admin — announce — Announcement**
+   一位管理員可發布多則公告（1..N），每則公告僅屬於一位管理員（1）。
+
+7. **User — receipt — Recipt — Book**
+   一位學生會產生多張收據（0..N），每張收據對應一位學生和一本書。
+
+- **Title** 實體已合併為 Book 的 Title 屬性（不再獨立）。
+- **Announcement、Comment、Recipt** 為新加入的實體，分別記錄公告、評分、借書收據。
+- **關聯命名與基數** 依照圖上標註進行修正，反映一對多、多對一或多對多關係。
+- 關聯如有複合主鍵、聯合屬性則已簡化合併為單一實體的主鍵設計。
