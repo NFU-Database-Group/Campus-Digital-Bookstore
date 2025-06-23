@@ -7,6 +7,7 @@ G02 校園數位書城
 請使用以下媒體閱讀本專題的文書報告：
 
 - [Markdown 報告](src/Campus-Digital-Bookstore.md)
+- [簡報](https://www.canva.com/design/DAGpSolR-4E/IaPS4ofKLJ71xOg5Dzbo3w/edit?utm_content=DAGpSolR-4E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## 成員
 
